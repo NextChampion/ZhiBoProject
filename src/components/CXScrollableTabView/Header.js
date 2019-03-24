@@ -189,6 +189,7 @@ export default class Header extends Component {
     }
 
     renderTabBarItem = ({ item, index }) => {
+        const { tabItemStyle } = this.props;
         const { selected } = item;
         const { viewStyle, textStyle } = this.getStyles(index, selected);
         return (
@@ -199,7 +200,7 @@ export default class Header extends Component {
                 style={styles.tabbar}
                 onLayout={this.measureTab.bind(this, index)}
             >   
-                <View style={viewStyle}>
+                <View style={[viewStyle, {tabItemStyle}]}>
                     <Text style={textStyle}>{item.title}</Text>
                 </View>
             </Button>

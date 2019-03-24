@@ -47,7 +47,7 @@ export default class JJScrollableTabView extends Component {
     }
 
     render() {
-        const { data, initialPage, leftComponent } = this.props;
+        const { data, initialPage, leftComponent, tabItemStyle } = this.props;
         return (
             <View style={styles.container}>
                 <Content 
@@ -66,6 +66,7 @@ export default class JJScrollableTabView extends Component {
                 </Content>
                 <Header 
                     leftComponent={leftComponent}
+                    tabItemStyle={tabItemStyle}
                     ref={a => this.tabbar = a}
                     data={data} 
                     onItemChanged={this.onTabbarChanged}

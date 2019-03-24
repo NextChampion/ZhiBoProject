@@ -17,7 +17,7 @@ if (IS_IPHONE_PLUS) {
 }
 
 const color = {
-  primary1: '#ed717c',
+  primary1: '#FFB911',
   unselected: '#cdcdcd',
   border: '#D8D7DC',
   disable: '#E6EFFA',
