@@ -51,19 +51,19 @@ class Splash extends Component {
                 justifyContent: 'center',
               }}
             >
-              <Text style={styles.text}>And simple</Text>
+              <Text style={styles.text}>SplashScreen</Text>
             </View>
             <Button type="small" name="Get Started" onPress={this.onStart} />
           </View>
           <View style={styles.slide1}>
             <Text style={styles.text}>Hello Swiper</Text>
           </View>
-          <View style={styles.slide2}>
+          {/* <View style={styles.slide2}>
             <Text style={styles.text}>Beautiful</Text>
           </View>
           <View style={styles.slide3}>
             <Text style={styles.text}>Beautiful</Text>
-          </View>
+          </View> */}
         </Swiper>
       </Container>
     );

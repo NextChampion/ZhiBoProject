@@ -207,7 +207,7 @@ export default class Header extends Component {
     }
 
     render() {
-        const { list } = this.state;
+        const { list, leftComponent } = this.state;
         const dynamicTabUnderline = {
             left: this.state.leftOfTabUnderline,
             width: this.state.widthOfTabUnderline,
@@ -215,18 +215,7 @@ export default class Header extends Component {
         return (
             <View style={styles.container}>
                 {/* <Animated.View style={[styles.tabUnderlineStyle,dynamicTabUnderline]} /> */}
-                <View 
-                    ref={a => (this.left = a)}
-                    style={styles.headerLeft}
-                    onLayout={() => {
-                        const handle = findNodeHandle(this.left);
-                        UIManager.measure(handle, (x, width) => {
-                            this.defaultOffSet = x + width;
-                        });
-                    }}
-                >
-                    <Text>返回</Text>
-                </View>
+                {leftComponent}
                 <FlatList
                     ref={a => (this.list = a)}
                     data={list}
