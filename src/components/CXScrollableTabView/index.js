@@ -19,11 +19,6 @@ import Content from './Content';
 const TAG = '[RN_JJScrollableTabView]';
 
 export default class JJScrollableTabView extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
     static propTypes = {
         data: PropTypes.array,
     };
@@ -31,6 +26,11 @@ export default class JJScrollableTabView extends Component {
     static defaultProps = {
         data: [],
     };
+
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
 
     onTabbarChanged = index => {
         this.content.goToPage(index);
@@ -45,7 +45,9 @@ export default class JJScrollableTabView extends Component {
         return (
             <View style={styles.container}>
                 <Content
-                    ref={a => (this.content = a)}
+                    ref={a => {
+                        this.content = a;
+                    }}
                     onPageChanged={this.onContentPageChanged}
                     initialPage={initialPage}
                     data={data}
@@ -66,7 +68,9 @@ export default class JJScrollableTabView extends Component {
                 <Header
                     leftComponent={leftComponent}
                     tabItemStyle={tabItemStyle}
-                    ref={a => (this.tabbar = a)}
+                    ref={a => {
+                        this.tabbar = a;
+                    }}
                     data={data}
                     onItemChanged={this.onTabbarChanged}
                 />
