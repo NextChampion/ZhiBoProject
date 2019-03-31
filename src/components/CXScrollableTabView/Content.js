@@ -7,7 +7,8 @@
  * 1.显示tabbar内部的内容
  *
  */
-'use strict';
+
+
 import React, { Component } from 'react';
 import {
     StyleSheet,
@@ -21,16 +22,17 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import SceneComponent from './SceneComponent';
-const {height, width: screenWidth} = Dimensions.get('window');
 
-const TAG = "[RN_Header]";
+const { height, width: screenWidth } = Dimensions.get('window');
+
+const TAG = '[RN_Header]';
 
 export default class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {
             currentPage: 0,
-        }
+        };
         this.currentPageIndex = 0;
     }
 
@@ -50,7 +52,7 @@ export default class Header extends Component {
         onPageChanged: null,
     };
 
-    onMomentumScrollBeginAndEnd = (e) => {
+    onMomentumScrollBeginAndEnd = e => {
         const offsetX = e.nativeEvent.contentOffset.x;
         const page = Math.round(offsetX / screenWidth);
         const { onPageChanged } = this.props;
@@ -59,21 +61,24 @@ export default class Header extends Component {
         }
         this.currentPageIndex = page;
         onPageChanged && onPageChanged(page);
-    }
+    };
 
-    goToPage = (pageNumber) => {
+    goToPage = pageNumber => {
         const offset = pageNumber * screenWidth;
         this.scrollView.getNode().scrollTo({ x: offset, y: 0, animated: true });
-    }
+    };
 
     makeSceneKey = (child, idx) => {
-        return child.props.tabLabel + '_' + idx;
-    }
+        return `${child.props.tabLabel  }_${  idx}`;
+    };
 
     shouldRenderSceneKey = (idx, currentPageKey) => {
         const numOfSibling = this.props.prerenderingSiblingsNumber;
-        return (idx < (currentPageKey + numOfSibling + 1) && idx > (currentPageKey - numOfSibling - 1));
-    }
+        return (
+            idx < currentPageKey + numOfSibling + 1 &&
+            idx > currentPageKey - numOfSibling - 1
+        );
+    };
 
     composeScenes = () => {
         return this.props.children.map((child, idx) => {
@@ -81,14 +86,17 @@ export default class Header extends Component {
             return (
                 <SceneComponent
                     key={child.key}
-                    shouldUpdated={this.shouldRenderSceneKey(idx, this.state.currentPage)}
+                    shouldUpdated={this.shouldRenderSceneKey(
+                        idx,
+                        this.state.currentPage,
+                    )}
                     style={{ width: screenWidth }}
                 >
                     {child}
                 </SceneComponent>
             );
         });
-    }
+    };
 
     render() {
         const { data, children, initialPage } = this.props;
@@ -97,39 +105,43 @@ export default class Header extends Component {
         const scenes = this.composeScenes();
         return (
             <Animated.ScrollView
-                    horizontal
-                    pagingEnabled
-                    automaticallyAdjustContentInsets={false}
-                    contentContainerStyle={{ width: contentContainerWidth }}
-                    contentOffset={{ x: offsetX }}
-                    ref={(scrollView) => { this.scrollView = scrollView }}
-                    onScroll={Animated.event(
-                        [{
+                horizontal
+                pagingEnabled
+                automaticallyAdjustContentInsets={false}
+                contentContainerStyle={{ width: contentContainerWidth }}
+                contentOffset={{ x: offsetX }}
+                ref={scrollView => {
+                    this.scrollView = scrollView;
+                }}
+                onScroll={Animated.event(
+                    [
+                        {
                             nativeEvent: {
                                 contentOffset: {
                                     x: this.state.scrollXIOS,
                                 },
                             },
-                        }],
-                        {
-                            useNativeDriver: true,
-                        }
-                    )}
-                    onMomentumScrollBegin={this.onMomentumScrollBeginAndEnd}
-                    onMomentumScrollEnd={this.onMomentumScrollBeginAndEnd}
-                    scrollEventThrottle={16}
-                    scrollsToTop={false}
-                    showsHorizontalScrollIndicator={false}
-                    scrollEnabled={!this.props.locked}
-                    directionalLockEnabled
-                    alwaysBounceVertical={false}
-                    keyboardDismissMode="on-drag"
-                >
-                    {scenes}
-                </Animated.ScrollView>
-        )
+                        },
+                    ],
+                    {
+                        useNativeDriver: true,
+                    },
+                )}
+                onMomentumScrollBegin={this.onMomentumScrollBeginAndEnd}
+                onMomentumScrollEnd={this.onMomentumScrollBeginAndEnd}
+                scrollEventThrottle={16}
+                scrollsToTop={false}
+                showsHorizontalScrollIndicator={false}
+                scrollEnabled={!this.props.locked}
+                directionalLockEnabled
+                alwaysBounceVertical={false}
+                keyboardDismissMode="on-drag"
+            >
+                {scenes}
+            </Animated.ScrollView>
+        );
     }
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -140,16 +152,10 @@ const styles = StyleSheet.create({
     tabbarContainer: {
         height: 44,
     },
-    headerLeft: {
-
-    },
-    tabbarList: {
-
-    },
-    tabbar: {
-
-    },
+    headerLeft: {},
+    tabbarList: {},
+    tabbar: {},
     content: {
         flex: 1,
-    }
+    },
 });

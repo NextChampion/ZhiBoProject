@@ -5,29 +5,29 @@ import { store, onLoadRedux, Provider } from './redux';
 import Navigator from './navigators/index';
 
 export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loaded: false,
-    };
-  }
-
-  componentDidMount() {
-    SplashScreen.hide();
-    onLoadRedux(states => {
-      this.setState({ loaded: true });
-    });
-  }
-
-  render() {
-    const { loaded } = this.state;
-    if (!loaded) {
-      return null;
+    constructor(props) {
+        super(props);
+        this.state = {
+            loaded: false,
+        };
     }
-    return (
-      <Provider store={store}>
-        <Navigator />
-      </Provider>
-    );
-  }
+
+    componentDidMount() {
+        SplashScreen.hide();
+        onLoadRedux(states => {
+            this.setState({ loaded: true });
+        });
+    }
+
+    render() {
+        const { loaded } = this.state;
+        if (!loaded) {
+            return null;
+        }
+        return (
+            <Provider store={store}>
+                <Navigator />
+            </Provider>
+        );
+    }
 }

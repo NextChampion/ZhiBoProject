@@ -9,7 +9,8 @@
  * 2.当网络图片缓存完后,显示网络图片
  *
  */
-'use strict';
+
+
 import React, { Component } from 'react';
 import {
     StyleSheet,
@@ -25,8 +26,8 @@ import { UIManager } from 'NativeModules';
 
 import Button from './Button';
 
-const {height, width: screenWidth} = Dimensions.get('window');
-const TAG = "[RN_Header]";
+const { height, width: screenWidth } = Dimensions.get('window');
+const TAG = '[RN_Header]';
 
 export default class Header extends Component {
     constructor(props) {
@@ -35,7 +36,7 @@ export default class Header extends Component {
             list: [],
             leftOfTabUnderline: new Animated.Value(0),
             widthOfTabUnderline: new Animated.Value(100),
-        }
+        };
         this.tabPositions = [];
         this.defaultOffSet = 0;
         this.currentIndex = 0;
@@ -59,24 +60,23 @@ export default class Header extends Component {
         const list = data.map((d, index) => {
             if (this.currentIndex === index) {
                 return { ...d, selected: true, _id: `${index}`};
-            } else {
+            } 
                 return { ...d, selected: false, _id: `${index}`};
-            }
-        })
+            
+        });
         this.setState({ list });
     }
 
-    componentDidMount() {
-    }
+    componentDidMount() {}
 
     scrollToIndex = (index, animated = true) => {
         let marginLeft = this.defaultOffSet;
         let marginRight = 0;
         let widthOfTabUnderline;
-        let currentWidth=0;
+        let currentWidth = 0;
         this.tabPositions.forEach((position, idx) => {
             if (idx < index) {
-                const { width } = position
+                const { width } = position;
                 marginLeft += width;
             }
             if (idx === index) {
@@ -87,32 +87,33 @@ export default class Header extends Component {
                 widthOfTabUnderline = new Animated.Value(width);
             }
             if (idx > index) {
-                const { width } = position
+                const { width } = position;
                 marginRight += width;
             }
-        })
-        
+        });
+
         const midPointOfScreen = Math.floor(screenWidth / 2);
         const offsetLeft = marginLeft - midPointOfScreen;
         const offsetRight = midPointOfScreen - marginRight;
-        const leftOfTabUnderline = new Animated.Value(midPointOfScreen- currentWidth/ 2);
+        const leftOfTabUnderline = new Animated.Value(
+            midPointOfScreen - currentWidth / 2,
+        );
 
         // 设置背景 or 底部横线的位置
         this.setState({
             leftOfTabUnderline,
-            widthOfTabUnderline
-        })
+            widthOfTabUnderline,
+        });
         // 移动button的位置
-        if (offsetLeft < 0 ) {
-        this.list.scrollToOffset({animated, offset: 0});
-        return;
+        if (offsetLeft < 0) {
+            this.list.scrollToOffset({ animated, offset: 0 });
+            return;
         }
         if (offsetRight > 0) {
             this.list.scrollToEnd();
             return;
         }
-        this.list.scrollToOffset({animated, offset: offsetLeft});
-        
+        this.list.scrollToOffset({ animated, offset: offsetLeft });
     };
 
     onClickItem = ({ item, index }) => {
@@ -127,32 +128,32 @@ export default class Header extends Component {
         const newList = list.map((d,idx) => {
             if (index === idx) {
                 return { ...d, selected: true };
-            } else {
+            } 
                 return { ...d, selected: false };
-            }
-        })
-        this.setState({list: newList });
-    }
+            
+        });
+        this.setState({ list: newList });
+    };
 
     goToIndex = index => {
         const { list } = this.state;
         const newList = list.map((d,idx) => {
             if (index === idx) {
                 return { ...d, selected: true };
-            } else {
+            } 
                 return { ...d, selected: false };
-            }
-        })
-        this.setState({list: newList });
-    }
+            
+        });
+        this.setState({ list: newList });
+    };
 
     measureTab = (index, event) => {
-        const { x, width, height, } = event.nativeEvent.layout;
+        const { x, width, height } = event.nativeEvent.layout;
         this.tabPositions[index] = { left: x, right: x + width, width, height };
-    }
+    };
 
     getStyles = (index, selected) => {
-        let viewStyle; 
+        let viewStyle;
         let textStyle;
         if (index === 0) {
             if (selected) {
@@ -161,19 +162,19 @@ export default class Header extends Component {
                     color: '#FFFFFF',
                 };
                 viewStyle = {
-                    width: 50, 
-                    alignItems: 'center', 
+                    width: 50,
+                    alignItems: 'center',
                     justifyContent: 'center',
-                }
+                };
             } else {
                 textStyle = {
                     fontSize: 14,
                 };
                 viewStyle = {
-                    width: 50, 
-                    alignItems: 'center', 
+                    width: 50,
+                    alignItems: 'center',
                     justifyContent: 'center',
-                }
+                };
             }
             return { viewStyle, textStyle };
         }
@@ -182,11 +183,11 @@ export default class Header extends Component {
             viewStyle = styles.selectedTextViewStyle;
             textStyle = styles.selectedTextStyle;
             return { viewStyle, textStyle };
-        } 
+        }
         viewStyle = styles.textViewStyle;
         textStyle = styles.textStyle;
         return { viewStyle, textStyle };
-    }
+    };
 
     renderTabBarItem = ({ item, index }) => {
         const { tabItemStyle } = this.props;
@@ -195,17 +196,17 @@ export default class Header extends Component {
         return (
             <Button
                 onPress={() => {
-                    this.onClickItem({ item, index })
+                    this.onClickItem({ item, index });
                 }}
                 style={styles.tabbar}
                 onLayout={this.measureTab.bind(this, index)}
-            >   
-                <View style={[viewStyle, {tabItemStyle}]}>
+            >
+                <View style={[viewStyle, { tabItemStyle }]}>
                     <Text style={textStyle}>{item.title}</Text>
                 </View>
             </Button>
-        )
-    }
+        );
+    };
 
     render() {
         const { list, leftComponent } = this.state;
@@ -224,13 +225,13 @@ export default class Header extends Component {
                     initialNumToRender={5}
                     style={styles.tabbarList}
                     showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item) => item._id}
+                    keyExtractor={item => item._id}
                     renderItem={this.renderTabBarItem}
                 />
             </View>
         );
     }
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -248,8 +249,7 @@ const styles = StyleSheet.create({
     headerLeft: {
         paddingHorizontal: 10,
     },
-    tabbarList: {
-    },
+    tabbarList: {},
     tabbar: {
         height: 30,
         justifyContent: 'center',
@@ -280,7 +280,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 10,
         paddingVertical: 4,
-        backgroundColor: '#FDBB3F'
+        backgroundColor: '#FDBB3F',
     },
-    
 });
