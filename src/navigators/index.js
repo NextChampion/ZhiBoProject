@@ -4,8 +4,8 @@ import MainNavigator from './MainNavigator';
 import SplashScreen from '../screens/SplashScreen';
 
 const RootNavigator = createSwitchNavigator({
-  splash: SplashScreen,
-  main: MainNavigator,
+    splash: SplashScreen,
+    main: MainNavigator,
 });
 
 export default createAppContainer(RootNavigator);

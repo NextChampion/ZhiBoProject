@@ -1,3 +1,3 @@
 export default function({ persistor, store, actions }) {
-  // const state = store.getState();
+    // const state = store.getState();
 }

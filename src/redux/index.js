@@ -20,27 +20,27 @@ console.info('[Redux] store to persist', persists);
 
 export default actions;
 export const store = createStore(
-  persistReducer(
-    {
-      key: 'root',
-      storage,
-      whitelist: persists,
-      transforms: [immutableTransform()],
-    },
-    combineReducers(reducers),
-  ),
-  applyMiddleware(...middlewares),
+    persistReducer(
+        {
+            key: 'root',
+            storage,
+            whitelist: persists,
+            transforms: [immutableTransform()],
+        },
+        combineReducers(reducers),
+    ),
+    applyMiddleware(...middlewares),
 );
 
 export function onLoadRedux(onComplete) {
-  const persistor = persistStore(store, null, () => {
-    // update store due to app update
-    updateStore({ persistor, store, actions });
-    onComplete(store.getState());
-  });
-  // persistor.purge();
+    const persistor = persistStore(store, null, () => {
+        // update store due to app update
+        updateStore({ persistor, store, actions });
+        onComplete(store.getState());
+    });
+    // persistor.purge();
 }
 
 export function dispatch(action, params) {
-  store.dispatch(actions[action](params));
+    store.dispatch(actions[action](params));
 }

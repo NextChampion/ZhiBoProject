@@ -43,15 +43,19 @@ export default class Splash extends Component {
                 title: '王者荣耀',
                 id: 7,
             },
-        ]
-    }
+        ],
+    };
 
-    componentDidMount() { }
+    componentDidMount() {}
 
     render() {
+        const { list } = this.props;
         return (
             <Container style={{ paddingBottom: UI.IS_IPHONE_X ? 24 : 0 }}>
-                <CXScrollableTabView data={this.state.list} tabItemStyle={styles.tabItemStyle} />
+                <CXScrollableTabView
+                    data={list}
+                    tabItemStyle={styles.tabItemStyle}
+                />
             </Container>
         );
     }
@@ -60,5 +64,5 @@ export default class Splash extends Component {
 const styles = StyleSheet.create({
     tabItemStyle: {
         backgroundColor: UI.color.primary1,
-    }
+    },
 });
