@@ -10,13 +10,7 @@
  *
  */
 import React, { Component } from 'react';
-import {
-    StyleSheet,
-    FlatList,
-    View,
-    Text,
-    DeviceEventEmitter,
-} from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 
 import Header from './Header';
@@ -24,7 +18,7 @@ import Content from './Content';
 
 export default class JJScrollableTabView extends Component {
     static propTypes = {
-        data: PropTypes.array,
+        // data: PropTypes.array,
         isAbsolutePosition: PropTypes.bool,
         type: PropTypes.string,
         locked: PropTypes.bool,
@@ -32,7 +26,7 @@ export default class JJScrollableTabView extends Component {
     };
 
     static defaultProps = {
-        data: [],
+        // data: [],
         isAbsolutePosition: false,
         type: 'home',
         locked: false,
@@ -45,28 +39,25 @@ export default class JJScrollableTabView extends Component {
         this.currentIndex = 0;
     }
 
-    componentDidMount() {
-        this.listener = DeviceEventEmitter.addListener(
-            'didTabBarChanged',
-            this.onRootTabBarChanged,
-        );
-    }
+    componentDidMount() {}
 
-    componentWillUnmount() {
-        this.listener && this.listener.remove();
-    }
+    componentWillUnmount() {}
 
     onTabbarChanged = index => {
         this.currentIndex = index;
         const { onTabBarChenged } = this.props;
-        onTabBarChenged && onTabBarChenged(index);
+        if (onTabBarChenged) {
+            onTabBarChenged(index);
+        }
         this.content.goToPage(index);
     };
 
     onRootTabBarChanged = index => {
         if (index === 0) {
             const { onTabBarChenged } = this.props;
-            onTabBarChenged && onTabBarChenged(this.currentIndex);
+            if (onTabBarChenged) {
+                onTabBarChenged(this.currentIndex);
+            }
         }
     };
 
@@ -91,7 +82,9 @@ export default class JJScrollableTabView extends Component {
             return (
                 <View style={styles.container}>
                     <Content
-                        ref={a => (this.content = a)}
+                        ref={a => {
+                            this.content = a;
+                        }}
                         onPageChanged={this.onContentPageChanged}
                         initialPage={initialPage}
                         data={data}
@@ -101,7 +94,7 @@ export default class JJScrollableTabView extends Component {
                             ? children
                             : data.map((d, index) => (
                                   <View
-                                      key={index}
+                                      key={d.title}
                                       tabLabel={d.title}
                                       style={[
                                           styles.innerContainer,
@@ -117,7 +110,9 @@ export default class JJScrollableTabView extends Component {
                         style={headerStyle}
                         leftComponent={leftComponent}
                         leftDarkComponent={leftDarkComponent}
-                        ref={a => (this.tabbar = a)}
+                        ref={a => {
+                            this.tabbar = a;
+                        }}
                         data={data}
                         onItemChanged={this.onTabbarChanged}
                     />
@@ -129,13 +124,17 @@ export default class JJScrollableTabView extends Component {
                 <Header
                     leftComponent={leftComponent}
                     leftDarkComponent={leftDarkComponent}
-                    ref={a => (this.tabbar = a)}
+                    ref={a => {
+                        this.tabbar = a;
+                    }}
                     data={data}
                     onItemChanged={this.onTabbarChanged}
                     style={styles.header}
                 />
                 <Content
-                    ref={a => (this.content = a)}
+                    ref={a => {
+                        this.content = a;
+                    }}
                     onPageChanged={this.onContentPageChanged}
                     initialPage={initialPage}
                     data={data}
@@ -145,7 +144,7 @@ export default class JJScrollableTabView extends Component {
                         ? children
                         : data.map((d, index) => (
                               <View
-                                  key={index}
+                                  key={d.title}
                                   tabLabel={d.title}
                                   style={[
                                       styles.innerContainer,
@@ -170,7 +169,6 @@ const styles = StyleSheet.create({
     },
     header: {
         position: 'relative',
-        backgroundColor: 'red',
     },
     headerLeft: {},
     tabbarList: {},

@@ -244,7 +244,7 @@ export default class Header extends Component {
                 onLayout={this.measureTab.bind(this, index)}
             >
                 <View style={viewStyle}>
-                    <Text style={textStyle}>{item.game_name || item.name}</Text>
+                    <Text style={textStyle}>{item.title || item.name}</Text>
                 </View>
             </Button>
         );
