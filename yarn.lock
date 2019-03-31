@@ -792,6 +792,11 @@
     "@types/istanbul-lib-coverage" "^1.1.0"
     "@types/yargs" "^12.0.9"
 
+"@react-native-community/async-storage@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.npmjs.org/@react-native-community/async-storage/-/async-storage-1.2.2.tgz#1f9851a6dd2b0af08ed3ab69b7f7353c4e85ea1d"
+  integrity sha512-sjL32DFXSD26RKVZfdBgRBKQCfqO9Vh8yBukjW0ajnMsCmqRxpe0tic6D+g+EW+MI8sohtr/02bhHfVClG8Eqw==
+
 "@react-native-community/cli@^1.2.1":
   version "1.5.1"
   resolved "https://registry.npmjs.org/@react-native-community/cli/-/cli-1.5.1.tgz#21a93266ecf1885990ac86680a369aa3ff432973"
@@ -831,6 +836,16 @@
     ws "^1.1.0"
     xcode "^2.0.0"
     xmldoc "^0.4.0"
+
+"@react-native-community/slider@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/@react-native-community/slider/-/slider-1.0.4.tgz#3ef928c87c686d673ae829e492c7aad4d061d666"
+  integrity sha512-L02BSwDTHGc5BPrtllMTOKSKg9QyJbz001pIkD2FGmUFA9Nfvs0cne36N4nnrR5jQhSzwnmnQpzXkQ/yzQxwMg==
+
+"@react-native-community/viewpager@^1.1.5":
+  version "1.1.5"
+  resolved "https://registry.npmjs.org/@react-native-community/viewpager/-/viewpager-1.1.5.tgz#98f1a3adabfc33dafe5baaf653ce300c2475e62e"
+  integrity sha512-JJf6no31hH+Zuhex6F3VdmQ3TLdtdCtcVY4Ej53wp7qFvnmzCGs595czFKULPTpp821ioqXppX40ZZ6jMVQefQ==
 
 "@react-navigation/core@3.2.0":
   version "3.2.0"

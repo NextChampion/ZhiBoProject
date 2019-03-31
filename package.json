@@ -9,6 +9,9 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.2.2",
+    "@react-native-community/slider": "^1.0.4",
+    "@react-native-community/viewpager": "^1.1.5",
     "axios": "^0.18.0",
     "immutable": "^4.0.0-rc.12",
     "prop-types": "^15.7.2",
