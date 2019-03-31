@@ -52,7 +52,7 @@ export default class JJScrollableTabView extends Component {
                 >
                     {data.map((d, index) => (
                         <View
-                            key={index}
+                            key={d.title}
                             tabLabel={d.title}
                             style={[
                                 styles.innerContainer,
