@@ -226,7 +226,7 @@ export default class Header extends Component {
         }
         if (this.currentIndex === 0) {
             viewStyle = styles.textViewStyle;
-            textStyle = [styles.textStyle, { color: '#FFFFFF', opacity: 0.6 }];
+            textStyle = [styles.textStyle, { color: '#000000', opacity: 0.6 }];
         } else {
             viewStyle = styles.textViewStyle;
             textStyle = styles.textStyle;
