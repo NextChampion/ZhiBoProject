@@ -10,7 +10,6 @@
  *
  */
 
-
 import React, { Component } from 'react';
 import {
     StyleSheet,
@@ -26,22 +25,9 @@ import { UIManager } from 'NativeModules';
 
 import Button from './Button';
 
-const { height, width: screenWidth } = Dimensions.get('window');
-const TAG = '[RN_Header]';
+const { width: screenWidth } = Dimensions.get('window');
 
 export default class Header extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            list: [],
-            leftOfTabUnderline: new Animated.Value(0),
-            widthOfTabUnderline: new Animated.Value(100),
-        };
-        this.tabPositions = [];
-        this.defaultOffSet = 0;
-        this.currentIndex = 0;
-    }
-
     static propTypes = {
         data: PropTypes.array,
         onItemChanged: PropTypes.func,
@@ -54,20 +40,48 @@ export default class Header extends Component {
         defaultIndex: 0,
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            list: [],
+            leftOfTabUnderline: new Animated.Value(0),
+            widthOfTabUnderline: new Animated.Value(100),
+            isShowDarkBtn: false,
+        };
+        this.tabPositions = [];
+        this.defaultOffSet = 0;
+        this.currentIndex = 0;
+    }
+
     componentWillMount() {
         const { data, defaultIndex } = this.props;
         this.currentIndex = defaultIndex;
         const list = data.map((d, index) => {
             if (this.currentIndex === index) {
-                return { ...d, selected: true, _id: `${index}`};
-            } 
-                return { ...d, selected: false, _id: `${index}`};
-            
+                return { ...d, selected: true, _id: `${index}` };
+            }
+            return { ...d, selected: false, _id: `${index}` };
         });
         this.setState({ list });
     }
 
-    componentDidMount() {}
+    componentWillReceiveProps(props) {
+        const { data } = props;
+        const list = data.map((d, index) => {
+            if (this.currentIndex === index) {
+                return { ...d, selected: true, _id: `${index}` };
+            }
+            return { ...d, selected: false, _id: `${index}` };
+        });
+        this.setState({ list });
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return (
+            this.props.data !== nextProps.data ||
+            this.state.list !== nextState.list
+        );
+    }
 
     scrollToIndex = (index, animated = true) => {
         let marginLeft = this.defaultOffSet;
@@ -99,11 +113,16 @@ export default class Header extends Component {
             midPointOfScreen - currentWidth / 2,
         );
 
+        const { leftDarkComponent } = this.props;
         // 设置背景 or 底部横线的位置
-        this.setState({
-            leftOfTabUnderline,
-            widthOfTabUnderline,
-        });
+        const newState = { leftOfTabUnderline, widthOfTabUnderline };
+        if (index !== 0 && leftDarkComponent) {
+            newState.isShowDarkBtn = true; // 左侧的返回按钮
+        } else {
+            newState.isShowDarkBtn = false;
+        }
+        // 设置背景 or 底部横线的位置
+        this.setState(newState);
         // 移动button的位置
         if (offsetLeft < 0) {
             this.list.scrollToOffset({ animated, offset: 0 });
@@ -116,6 +135,18 @@ export default class Header extends Component {
         this.list.scrollToOffset({ animated, offset: offsetLeft });
     };
 
+    goToIndex = index => {
+        const { list } = this.state;
+        const newList = list.map((d, idx) => {
+            if (index === idx) {
+                return { ...d, selected: true };
+            }
+            return { ...d, selected: false };
+        });
+        this.setState({ list: newList });
+        this.scrollToIndex(index);
+    };
+
     onClickItem = ({ item, index }) => {
         const { onItemChanged } = this.props;
         this.scrollToIndex(index);
@@ -125,24 +156,11 @@ export default class Header extends Component {
         this.currentIndex = index;
         onItemChanged && onItemChanged(index, item);
         const { list } = this.state;
-        const newList = list.map((d,idx) => {
+        const newList = list.map((d, idx) => {
             if (index === idx) {
                 return { ...d, selected: true };
-            } 
-                return { ...d, selected: false };
-            
-        });
-        this.setState({ list: newList });
-    };
-
-    goToIndex = index => {
-        const { list } = this.state;
-        const newList = list.map((d,idx) => {
-            if (index === idx) {
-                return { ...d, selected: true };
-            } 
-                return { ...d, selected: false };
-            
+            }
+            return { ...d, selected: false };
         });
         this.setState({ list: newList });
     };
@@ -153,71 +171,107 @@ export default class Header extends Component {
     };
 
     getStyles = (index, selected) => {
+        const { type } = this.props;
         let viewStyle;
         let textStyle;
+        if (type === 'vod') {
+            // 第二个以及后面的tab
+            if (selected) {
+                viewStyle = styles.selectedTextViewStyle;
+                textStyle = styles.selectedTextStyle;
+                return { viewStyle, textStyle };
+            }
+            viewStyle = styles.textViewStyle;
+            textStyle = styles.textStyle;
+            return { viewStyle, textStyle };
+        }
+        // index为第一个时候单独处理时候
+        // 白色 透明度0.4
         if (index === 0) {
+            // 如果选择第一个
             if (selected) {
                 textStyle = {
                     fontSize: 18,
+                    lineHeight: 24,
                     color: '#FFFFFF',
                 };
                 viewStyle = {
                     width: 50,
                     alignItems: 'center',
                     justifyContent: 'center',
+                    height: 28,
+                    paddingBottom: 1,
                 };
             } else {
                 textStyle = {
                     fontSize: 14,
+                    lineHeight: 18,
+                    color: '#545454',
                 };
                 viewStyle = {
                     width: 50,
                     alignItems: 'center',
                     justifyContent: 'center',
+                    height: 28,
+                    paddingBottom: 1,
                 };
             }
             return { viewStyle, textStyle };
         }
-
+        // 第二个以及后面的tab
         if (selected) {
             viewStyle = styles.selectedTextViewStyle;
             textStyle = styles.selectedTextStyle;
             return { viewStyle, textStyle };
         }
-        viewStyle = styles.textViewStyle;
-        textStyle = styles.textStyle;
+        if (this.currentIndex === 0) {
+            viewStyle = styles.textViewStyle;
+            textStyle = [styles.textStyle, { color: '#FFFFFF', opacity: 0.6 }];
+        } else {
+            viewStyle = styles.textViewStyle;
+            textStyle = styles.textStyle;
+        }
         return { viewStyle, textStyle };
     };
 
     renderTabBarItem = ({ item, index }) => {
-        const { tabItemStyle } = this.props;
         const { selected } = item;
         const { viewStyle, textStyle } = this.getStyles(index, selected);
         return (
             <Button
-                onPress={() => {
-                    this.onClickItem({ item, index });
-                }}
+                onPress={() => this.onClickItem({ item, index })}
                 style={styles.tabbar}
                 onLayout={this.measureTab.bind(this, index)}
             >
-                <View style={[viewStyle, { tabItemStyle }]}>
-                    <Text style={textStyle}>{item.title}</Text>
+                <View style={viewStyle}>
+                    <Text style={textStyle}>{item.game_name || item.name}</Text>
                 </View>
             </Button>
         );
     };
 
     render() {
-        const { list, leftComponent } = this.state;
+        const { leftComponent, leftDarkComponent, style } = this.props;
+        const { list, isShowDarkBtn } = this.state;
         const dynamicTabUnderline = {
             left: this.state.leftOfTabUnderline,
             width: this.state.widthOfTabUnderline,
         };
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, style]}>
                 {/* <Animated.View style={[styles.tabUnderlineStyle,dynamicTabUnderline]} /> */}
-                {leftComponent}
+                <View
+                    ref={a => (this.left = a)}
+                    style={styles.headerLeft}
+                    onLayout={() => {
+                        const handle = findNodeHandle(this.left);
+                        UIManager.measure(handle, (x, width) => {
+                            this.defaultOffSet = x + width;
+                        });
+                    }}
+                >
+                    {isShowDarkBtn ? leftDarkComponent : leftComponent}
+                </View>
                 <FlatList
                     ref={a => (this.list = a)}
                     data={list}
@@ -246,9 +300,7 @@ const styles = StyleSheet.create({
     tabbarContainer: {
         height: 44,
     },
-    headerLeft: {
-        paddingHorizontal: 10,
-    },
+    headerLeft: {},
     tabbarList: {},
     tabbar: {
         height: 30,
@@ -266,20 +318,27 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         fontSize: 14,
-        color: 'rgba(0,0,0,0.8)',
+        lineHeight: 18,
+        color: '#545454',
     },
     selectedTextStyle: {
         color: '#FFFFFF',
+        lineHeight: 18,
+        fontSize: 14,
     },
     textViewStyle: {
         paddingHorizontal: 10,
-        borderRadius: 8,
-        paddingVertical: 4,
+        borderRadius: 12,
+        height: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     selectedTextViewStyle: {
         paddingHorizontal: 10,
-        borderRadius: 10,
-        paddingVertical: 4,
+        borderRadius: 12,
+        height: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#FDBB3F',
     },
 });

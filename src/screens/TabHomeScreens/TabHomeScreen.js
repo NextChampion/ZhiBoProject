@@ -48,6 +48,29 @@ export default class Splash extends Component {
 
     componentDidMount() {}
 
+    renderGameTypeView = data => {
+        const components = [];
+        if (data != null) {
+            data.forEach(b => {
+                const { id, title } = b;
+                if (id === 0) {
+                    components.push(
+                        <View style={styles.content} key={0} tabLabel={title}>
+                            <Text>1111</Text>
+                        </View>,
+                    );
+                } else {
+                    components.push(
+                        <View style={styles.content} key={id} tabLabel={title}>
+                            <Text>2222</Text>
+                        </View>,
+                    );
+                }
+            });
+        }
+        return components;
+    };
+
     render() {
         const { list } = this.props;
         return (
@@ -55,7 +78,9 @@ export default class Splash extends Component {
                 <CXScrollableTabView
                     data={list}
                     tabItemStyle={styles.tabItemStyle}
-                />
+                >
+                    {this.renderGameTypeView(list)}
+                </CXScrollableTabView>
             </Container>
         );
     }
@@ -64,5 +89,8 @@ export default class Splash extends Component {
 const styles = StyleSheet.create({
     tabItemStyle: {
         backgroundColor: UI.color.primary1,
+    },
+    content: {
+        flex: 1,
     },
 });

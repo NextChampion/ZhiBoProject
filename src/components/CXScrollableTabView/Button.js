@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
-import { TouchableOpacity, findNodeHandle } from 'react-native';
-import PropTypes from 'prop-types';
-import { UIManager } from 'NativeModules';
+import React from 'react';
+import { TouchableOpacity } from 'react-native';
 
 const Button = props => {
-    return <TouchableOpacity {...props}>{props.children}</TouchableOpacity>;
+    const { children } = props;
+    return <TouchableOpacity {...props}>{children}</TouchableOpacity>;
 };
 
 module.exports = Button;
