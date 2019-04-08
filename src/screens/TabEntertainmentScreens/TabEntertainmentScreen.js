@@ -6,22 +6,21 @@ import Container from '../../components/Container';
 import UI from '../../UI';
 
 export default class Splash extends Component {
-  static propTypes = {
-    navigation: PropTypes.shape({
-      navigate: PropTypes.func.isRequired,
-    }).isRequired,
-  };
+    static propTypes = {
+        navigation: PropTypes.shape({
+            navigate: PropTypes.func.isRequired,
+        }).isRequired,
+    };
 
-  componentDidMount() {}
+    componentDidMount() {}
 
-  render() {
-    return (
-      <Container style={{ paddingBottom: UI.IS_IPHONE_X ? 24 : 0 }}>
-        <Text>Entertainment</Text>
-      </Container>
-    );
-  }
+    render() {
+        return (
+            <Container style={{ paddingBottom: UI.IS_IPHONE_X ? 24 : 0 }}>
+                <Text>Entertainment</Text>
+            </Container>
+        );
+    }
 }
 
-const styles = StyleSheet.create({
-});
+const styles = StyleSheet.create({});
