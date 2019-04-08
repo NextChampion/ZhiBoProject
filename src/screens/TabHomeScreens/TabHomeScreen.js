@@ -60,6 +60,7 @@ export default class Splash extends Component {
                             </View>
                             <FlatList
                                 data={LocalData.listData}
+                                keyExtractor={item => item.key}
                                 renderItem={this.renderListItem}
                             />
                         </View>,
