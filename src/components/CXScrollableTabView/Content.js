@@ -22,7 +22,7 @@ const AnimatedViewPagerAndroid =
 
 export default class Header extends Component {
     static propTypes = {
-        data: PropTypes.array,
+        data: PropTypes.arrayOf(PropTypes.shape({})),
         prerenderingSiblingsNumber: PropTypes.number,
         initialPage: PropTypes.number,
         locked: PropTypes.bool,
