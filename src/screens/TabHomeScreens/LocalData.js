@@ -33,6 +33,53 @@ const listData = [
     },
 ];
 
+const tabbarListData = [
+    {
+        title: '推荐',
+        id: 1,
+    },
+    {
+        title: '星秀',
+        id: 2,
+    },
+    {
+        title: '一起看',
+        id: 3,
+    },
+    {
+        title: '户外',
+        id: 4,
+    },
+    {
+        title: '颜值',
+        id: 5,
+    },
+    {
+        title: '二次元',
+        id: 6,
+    },
+    {
+        title: '美食',
+        id: 7,
+    },
+    {
+        title: '交友',
+        id: 8,
+    },
+    {
+        title: '音乐',
+        id: 9,
+    },
+    {
+        title: '语音直播',
+        id: 10,
+    },
+    {
+        title: '娱乐天地',
+        id: 11,
+    },
+];
+
 const swiperListData = [
     {
         title: '推荐',
@@ -42,26 +89,8 @@ const swiperListData = [
         title: 'LOL',
         id: 2,
     },
-    {
-        title: 'Dota2',
-        id: 3,
-    },
-    {
-        title: 'DNF',
-        id: 4,
-    },
-    {
-        title: '绝地求生',
-        id: 5,
-    },
-    {
-        title: '刺激战场',
-        id: 6,
-    },
-    {
-        title: '王者荣耀',
-        id: 7,
-    },
 ];
 
-export default { listData, swiperListData };
+const roomListData = [];
+
+export default { listData, swiperListData, tabbarListData, roomListData };

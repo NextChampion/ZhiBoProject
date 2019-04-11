@@ -80,7 +80,7 @@ export default class Splash extends Component {
     render() {
         const { list } = this.state;
         return (
-            <Container style={{ paddingBottom: UI.IS_IPHONE_X ? 24 : 0 }}>
+            <Container style={{ flex: 1 }}>
                 <CXScrollableTabView
                     data={list}
                     tabItemStyle={styles.tabItemStyle}
