@@ -7,6 +7,15 @@ import TabVideoScreen from '../screens/TabVideoScreens/TabVideoScreen';
 import TabMineScreen from '../screens/TabMineScreens/TabMineScreen';
 import UI from '../UI';
 
+const tabMineSelected = require('./tabImages/tab_mine_selected.png');
+const tabMine = require('./tabImages/tab_mine.png');
+const tabMatchSelected = require('./tabImages/tab_match_selected.png');
+const tabMatch = require('./tabImages/tab_match.png');
+const tabVideoSelected = require('./tabImages/tab_video_selected.png');
+const tabVideo = require('./tabImages/tab_video.png');
+const tabHomeSelected = require('./tabImages/tab_home_selected.png');
+const tabHome = require('./tabImages/tab_home.png');
+
 const TabNavigator = createBottomTabNavigator(
     {
         Home: TabHomeScreen,
@@ -16,35 +25,35 @@ const TabNavigator = createBottomTabNavigator(
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
-            tabBarIcon: ({ focused, horizontal, tintColor }) => {
+            tabBarIcon: ({ focused }) => {
                 const { routeName } = navigation.state;
                 let source;
                 if (routeName === 'Mine') {
                     if (focused) {
-                        source = require('./tabImages/tab_mine_selected.png');
+                        source = tabMineSelected;
                     } else {
-                        source = require('./tabImages/tab_mine.png');
+                        source = tabMine;
                     }
                 }
                 if (routeName === 'Match') {
                     if (focused) {
-                        source = require('./tabImages/tab_match_selected.png');
+                        source = tabMatchSelected;
                     } else {
-                        source = require('./tabImages/tab_match.png');
+                        source = tabMatch;
                     }
                 }
                 if (routeName === 'Video') {
                     if (focused) {
-                        source = require('./tabImages/tab_video_selected.png');
+                        source = tabVideoSelected;
                     } else {
-                        source = require('./tabImages/tab_video.png');
+                        source = tabVideo;
                     }
                 }
                 if (routeName === 'Home') {
                     if (focused) {
-                        source = require('./tabImages/tab_home_selected.png');
+                        source = tabHomeSelected;
                     } else {
-                        source = require('./tabImages/tab_home.png');
+                        source = tabHome;
                     }
                 }
                 return (

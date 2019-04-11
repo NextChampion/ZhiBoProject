@@ -5,7 +5,8 @@ import UI from '../UI';
 
 export default class Container extends Component {
     shouldComponentUpdate(nextProps) {
-        return this.props.children !== nextProps.children;
+        const { children } = this.props;
+        return children !== nextProps.children;
     }
 
     scrollTo = offSet => {
@@ -26,7 +27,9 @@ export default class Container extends Component {
             return (
                 <ScrollView
                     {...others}
-                    ref={a => (this.scroll = a)}
+                    ref={a => {
+                        this.scroll = a;
+                    }}
                     style={[
                         { flex: 1, backgroundColor: UI.color.bg1 },
                         !!bgStyle && bgStyle,

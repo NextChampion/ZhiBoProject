@@ -83,7 +83,6 @@ export default class Splash extends Component {
             <Container style={{ paddingBottom: UI.IS_IPHONE_X ? 24 : 0 }}>
                 <CXScrollableTabView
                     data={list}
-                    isAbsolutePosition
                     tabItemStyle={styles.tabItemStyle}
                 >
                     {this.renderGameTypeView(list)}

@@ -292,10 +292,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         height: 44,
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 20,
     },
     tabbarContainer: {
         height: 44,

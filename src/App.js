@@ -14,7 +14,7 @@ export default class App extends Component {
 
     componentDidMount() {
         SplashScreen.hide();
-        onLoadRedux(states => {
+        onLoadRedux(() => {
             this.setState({ loaded: true });
         });
     }

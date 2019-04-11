@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
         height: 44,
     },
     header: {
-        position: 'relative',
+        // position: 'relative',
     },
     headerLeft: {},
     tabbarList: {},
