@@ -18,7 +18,7 @@ import Content from './Content';
 
 export default class JJScrollableTabView extends Component {
     static propTypes = {
-        data: PropTypes.array,
+        data: PropTypes.arrayOf(PropTypes.shape({})),
         isAbsolutePosition: PropTypes.bool,
         type: PropTypes.string,
         locked: PropTypes.bool,

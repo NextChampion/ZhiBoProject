@@ -67,8 +67,8 @@ Container.propTypes = {
 Container.defaultProps = {
     padding: false,
     scroll: false,
-    children: null,
-    style: null,
+    // children: null,
+    // style: null,
 };
 
 const styles = StyleSheet.create({

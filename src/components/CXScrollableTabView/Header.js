@@ -333,9 +333,10 @@ const styles = StyleSheet.create({
     selectedTextViewStyle: {
         paddingHorizontal: 10,
         borderRadius: 12,
+        overflow: 'hidden',
         height: 24,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FDBB3F',
+        backgroundColor: UI.color.primary1,
     },
 });
