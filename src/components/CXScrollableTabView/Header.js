@@ -24,6 +24,7 @@ import PropTypes from 'prop-types';
 import { UIManager } from 'NativeModules';
 
 import Button from './Button';
+import UI from '../../UI';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -193,7 +194,7 @@ export default class Header extends Component {
                 textStyle = {
                     fontSize: 18,
                     lineHeight: 24,
-                    color: '#FFFFFF',
+                    color: UI.color.primary1,
                 };
                 viewStyle = {
                     width: 50,
@@ -253,15 +254,13 @@ export default class Header extends Component {
     render() {
         const { leftComponent, leftDarkComponent, style } = this.props;
         const { list, isShowDarkBtn } = this.state;
-        const dynamicTabUnderline = {
-            left: this.state.leftOfTabUnderline,
-            width: this.state.widthOfTabUnderline,
-        };
         return (
             <View style={[styles.container, style]}>
                 {/* <Animated.View style={[styles.tabUnderlineStyle,dynamicTabUnderline]} /> */}
                 <View
-                    ref={a => (this.left = a)}
+                    ref={a => {
+                        this.left = a;
+                    }}
                     style={styles.headerLeft}
                     onLayout={() => {
                         const handle = findNodeHandle(this.left);
@@ -273,7 +272,9 @@ export default class Header extends Component {
                     {isShowDarkBtn ? leftDarkComponent : leftComponent}
                 </View>
                 <FlatList
-                    ref={a => (this.list = a)}
+                    ref={a => {
+                        this.list = a;
+                    }}
                     data={list}
                     horizontal
                     initialNumToRender={5}
