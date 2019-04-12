@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import UI from '../UI';
 
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     },
     view: {
         flex: 1,
+        marginTop: Platform.OS === 'ios' ? 20 : 0,
         backgroundColor: UI.color.bg1,
         paddingBottom: UI.unit * 4 + (UI.IS_IPHONE_X ? 24 : 0),
     },
