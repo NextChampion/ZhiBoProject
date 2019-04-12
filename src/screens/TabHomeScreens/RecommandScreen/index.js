@@ -25,7 +25,8 @@ export default class RecommandScreen extends Component {
             if (i >= section.data.length) {
                 break;
             }
-            items.push(<RoomListItem data={section.data[i]} />);
+            const data = section.data[i];
+            items.push(<RoomListItem key={data.roomId} data={data} />);
         }
         return (
             <View
