@@ -18,7 +18,8 @@ export default class H2 extends Component {
     };
 
     shouldComponentUpdate(nextProps) {
-        return this.props.children !== nextProps.children;
+        const { children } = this.props;
+        return children !== nextProps.children;
     }
 
     render() {
