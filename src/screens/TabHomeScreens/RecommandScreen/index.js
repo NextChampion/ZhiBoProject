@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, SectionList } from 'react-native';
 import PropTypes from 'prop-types';
 import Swiper from 'react-native-swiper';
-import { connect } from '../../redux';
-import Container from '../../components/Container';
-import UI from '../../UI';
-import LocalData from './LocalData';
+import { connect } from '../../../redux';
+import Container from '../../../components/Container';
+import RoomListItem from '../../../components/RoomListItem';
+import UI from '../../../UI';
+import LocalData from '../LocalData';
 
 export default class RecommandScreen extends Component {
     static propTypes = {
@@ -17,8 +18,7 @@ export default class RecommandScreen extends Component {
     componentDidMount() {}
 
     renderItem = ({ item, index, section }) => {
-        console.log('item, index, section', item, index, section);
-        return <Text key={index}>1111</Text>;
+        return <RoomListItem data={item} key={item.roomId} />;
     };
 
     renderSectionHeader = ({ section: { title } }) => (
@@ -43,6 +43,7 @@ export default class RecommandScreen extends Component {
                 </View>
                 <SectionList
                     renderItem={this.renderItem}
+                    numColumns={2}
                     renderSectionHeader={this.renderSectionHeader}
                     sections={LocalData.roomListData}
                     keyExtractor={(item, index) => item.roomId}
