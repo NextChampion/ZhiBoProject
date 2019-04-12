@@ -18,7 +18,30 @@ export default class RecommandScreen extends Component {
     componentDidMount() {}
 
     renderItem = ({ item, index, section }) => {
-        return <RoomListItem data={item} key={item.roomId} />;
+        const numColumns = 2;
+
+        if (index % numColumns !== 0) return null;
+
+        const items = [];
+
+        for (let i = index; i < index + numColumns; i += 1) {
+            if (i >= section.data.length) {
+                break;
+            }
+
+            items.push(<RoomListItem data={section.data[i]} />);
+        }
+
+        return (
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                }}
+            >
+                {items}
+            </View>
+        );
     };
 
     renderSectionHeader = ({ section: { title } }) => (
