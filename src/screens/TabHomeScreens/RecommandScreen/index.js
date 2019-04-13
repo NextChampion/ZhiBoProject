@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, SectionList } from 'react-native';
 import PropTypes from 'prop-types';
 import Swiper from 'react-native-swiper';
-import { connect } from '../../../redux';
+// import { connect } from '../../../redux';
 import Container from '../../../components/Container';
 import RoomListItem from '../../../components/RoomListItem';
+import JJRefreshControl, {
+    RefreshControlStatus,
+} from '../../../components/JJListView/JJRefreshControl';
 import UI from '../../../UI';
 import LocalData from '../LocalData';
+
+const RefreshThreshold = 68; // 触发刷新的临界值
 
 export default class RecommandScreen extends Component {
     static propTypes = {
@@ -15,9 +20,85 @@ export default class RecommandScreen extends Component {
         }).isRequired,
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            /**
+             * 下拉刷新的视图状态
+             * default: 1,
+             * holding: 2,
+             * refreshing: 3,
+             * refreshed: 4,
+             */
+            refreshControlStatus: RefreshControlStatus.default,
+        };
+        this.currentOffsetY = 0;
+        this.currentRefreshStatus = RefreshControlStatus.default;
+    }
+
     componentDidMount() {}
 
-    renderItem = ({ item, index, section }) => {
+    getMarginTop = refreshControlStatus => {
+        if (refreshControlStatus === RefreshControlStatus.default) {
+            return -50;
+        }
+        return 0;
+    };
+
+    onScroll = event => {
+        // y值为负数,加个负号,相当于取绝对值
+        this.currentOffsetY = -event.nativeEvent.contentOffset.y;
+        if (this.currentOffsetY > RefreshThreshold) {
+            if (this.currentRefreshStatus !== RefreshControlStatus.default) {
+                return;
+            }
+            this.currentRefreshStatus = RefreshControlStatus.holding;
+            this.setState({
+                refreshControlStatus: RefreshControlStatus.holding,
+            });
+        }
+    };
+
+    onScrollBeginDrag = () => {};
+
+    onScrollEndDrag = () => {
+        if (this.currentOffsetY > RefreshThreshold) {
+            if (this.currentRefreshStatus !== RefreshControlStatus.holding) {
+                return;
+            }
+            this.onRefresh();
+            return;
+        }
+        this.changeRefreshState(RefreshControlStatus.default);
+    };
+
+    onRefresh = () => {
+        this.changeRefreshState(RefreshControlStatus.refreshing);
+        setTimeout(() => {
+            this.changeRefreshState(
+                RefreshControlStatus.refreshed,
+                this.onRefreshFinished,
+            );
+        }, 2000);
+    };
+
+    onRefreshFinished = () => {
+        setTimeout(() => {
+            this.changeRefreshState(RefreshControlStatus.default);
+        }, 1000);
+    };
+
+    changeRefreshState = (state, callBack = null) => {
+        this.setState(
+            {
+                refreshControlStatus: state,
+            },
+            callBack,
+        );
+        this.currentRefreshStatus = state;
+    };
+
+    renderItem = ({ index, section }) => {
         const numColumns = 2;
         if (index % numColumns !== 0) return null;
         const items = [];
@@ -49,8 +130,14 @@ export default class RecommandScreen extends Component {
     );
 
     renderListHeaderComponent = () => {
+        const { refreshControlStatus } = this.state;
+        const marginTop = this.getMarginTop(refreshControlStatus);
         return (
-            <View style={styles.swiperContainer}>
+            <View style={[styles.swiperContainer, { marginTop }]}>
+                <JJRefreshControl
+                    status={refreshControlStatus}
+                    style={styles.refreshControl}
+                />
                 <Swiper style={styles.wrapper} autoplay>
                     <View style={styles.slide1}>
                         <Text style={styles.text}>Hello Swiper</Text>
@@ -75,7 +162,10 @@ export default class RecommandScreen extends Component {
                     numColumns={2}
                     renderSectionHeader={this.renderSectionHeader}
                     sections={LocalData.roomListData}
-                    keyExtractor={(item, index) => item.roomId}
+                    keyExtractor={item => item.roomId}
+                    onScroll={this.onScroll}
+                    onScrollBeginDrag={this.onScrollBeginDrag}
+                    onScrollEndDrag={this.onScrollEndDrag}
                 />
             </Container>
         );
@@ -95,9 +185,11 @@ const styles = StyleSheet.create({
         height: 50,
         borderTopWidth: StyleSheet.hairlineWidth,
         borderColor: UI.color.border,
+        backgroundColor: UI.color.white1,
     },
+    refreshControl: {},
     swiperContainer: {
-        height: 220,
+        height: 270,
     },
     wrapper: {},
     slide1: {

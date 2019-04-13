@@ -34,14 +34,7 @@ export default class RoomListItem extends Component {
     render() {
         console.debug('[render] RoomListItem');
         const { data, onPress } = this.props;
-        const {
-            name,
-            coverUrl,
-            anchorName,
-            category,
-            popularity,
-            roomId,
-        } = data;
+        const { name, coverUrl, anchorName, category, popularity } = data;
         return (
             <View style={styles.container}>
                 <TouchableOpacity onPress={onPress}>
