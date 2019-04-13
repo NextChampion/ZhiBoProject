@@ -74,11 +74,13 @@ const styles = StyleSheet.create({
         height: 50,
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
     },
     image: {
         width: 30,
         height: 30,
         backgroundColor: 'red',
+        marginRight: 12,
     },
     text: {
         color: 'green',

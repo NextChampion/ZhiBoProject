@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Container from '../../components/Container';
 import CXScrollableTabView from '../../components/CXScrollableTabView';
 import RecommandScreen from './RecommandScreen';
+import LiveListScreen from './LiveListScreen';
 import UI from '../../UI';
 import LocalData from './LocalData';
 
@@ -42,9 +43,7 @@ export default class Splash extends Component {
                     );
                 } else {
                     components.push(
-                        <View style={styles.content} key={id} tabLabel={title}>
-                            <Text>2222</Text>
-                        </View>,
+                        <LiveListScreen key={id} {...this.props} />,
                     );
                 }
             });
