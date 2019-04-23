@@ -21,6 +21,7 @@ import {
     Animated,
 } from 'react-native';
 import PropTypes from 'prop-types';
+// eslint-disable-next-line import/no-unresolved
 import { UIManager } from 'NativeModules';
 
 import Button from './Button';
@@ -193,7 +194,6 @@ export default class Header extends Component {
             if (selected) {
                 textStyle = {
                     fontSize: 18,
-                    lineHeight: 24,
                     color: UI.color.primary1,
                 };
                 viewStyle = {
@@ -206,7 +206,6 @@ export default class Header extends Component {
             } else {
                 textStyle = {
                     fontSize: 14,
-                    lineHeight: 18,
                     color: '#545454',
                 };
                 viewStyle = {
@@ -315,12 +314,10 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         fontSize: 14,
-        lineHeight: 18,
         color: '#545454',
     },
     selectedTextStyle: {
         color: '#FFFFFF',
-        lineHeight: 18,
         fontSize: 14,
     },
     textViewStyle: {

@@ -87,7 +87,7 @@ export default class LiveListScreen extends Component {
                     ListHeaderComponent={this.renderListHeaderComponent}
                     numColumns={2}
                     showsVerticalScrollIndicator={false}
-                    columnWrapperStyle={this.columnWrapperStyle}
+                    columnWrapperStyle={styles.columnWrapperStyle}
                     renderSectionHeader={this.renderSectionHeader}
                     data={LocalData.flatListData}
                     keyExtractor={item => item.roomId}
