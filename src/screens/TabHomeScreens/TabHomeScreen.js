@@ -62,7 +62,7 @@ export default class Splash extends Component {
     render() {
         const { list } = this.state;
         return (
-            <Container style={{ flex: 1, backgroundColor: 'green' }}>
+            <Container style={{ flex: 1, paddingBottom: 0 }}>
                 <CXScrollableTabView tabItemStyle={styles.tabItemStyle}>
                     {this.renderGameTypeView(list)}
                 </CXScrollableTabView>
