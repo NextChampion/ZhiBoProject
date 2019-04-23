@@ -266,6 +266,7 @@ export default class JJListView extends Component {
                     ref={a => {
                         this.listView = a;
                     }}
+                    style={{ flex: 1 }}
                     onLayout={this.onListLayout}
                     contentContainerStyle={{
                         ...contentContainerStyle,
