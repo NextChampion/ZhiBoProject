@@ -17,11 +17,13 @@ export default class JJListView extends Component {
     static propTypes = {
         refreshThreshold: PropTypes.number,
         isSection: PropTypes.bool,
+        refreshControlHeight: PropTypes.number,
     };
 
     static defaultProps = {
         refreshThreshold: 68, // 触发刷新的临界值
         isSection: false,
+        refreshControlHeight: 50,
     };
 
     constructor(props) {
@@ -52,9 +54,10 @@ export default class JJListView extends Component {
     }
 
     componentWillMount() {
+        const { refreshControlHeight } = this.props;
         this.HeaderSize = {
             height: Platform.OS === 'ios' ? 0 : 100,
-            marginTop: Platform.OS === 'ios' ? -this.refreshControlHeight : 0, // ios可以通过margintop的方式,把刷新视图隐藏在屏幕之外, Android则不行
+            marginTop: Platform.OS === 'ios' ? -refreshControlHeight : 0, // ios可以通过margintop的方式,把刷新视图隐藏在屏幕之外, Android则不行
             blankAresHeight: Platform.OS === 'ios' ? 0 : 50, // 只用于Android
         };
         this.androidDefaultOffset =
@@ -67,7 +70,7 @@ export default class JJListView extends Component {
             this.initializationTimer = setTimeout(() => {
                 const params = {
                     offset: this.androidDefaultOffset,
-                    animated: true,
+                    animated: false,
                 };
                 if (this.listView) {
                     this.listView.scrollToOffset(params);
@@ -201,30 +204,8 @@ export default class JJListView extends Component {
         const { listContentMinHeight } = this.state;
         if (listContentMinHeight < height) {
             if (Platform.OS === 'android') {
-                this.setState(
-                    {
-                        listContentMinHeight:
-                            height + this.androidDefaultOffset,
-                    },
-                    () => {
-                        const params = {
-                            offset: this.androidDefaultOffset,
-                            animated: true,
-                        };
-                        if (this.listView) {
-                            this.listView.scrollToOffset(params);
-                        }
-                    },
-                );
-            } else {
-                this.setState({ listContentMinHeight: height }, () => {
-                    const params = {
-                        offset: this.androidDefaultOffset,
-                        animated: true,
-                    };
-                    if (this.listView) {
-                        this.listView.scrollToOffset(params);
-                    }
+                this.setState({
+                    listContentMinHeight: height + this.androidDefaultOffset,
                 });
             }
         }
@@ -270,7 +251,6 @@ export default class JJListView extends Component {
     };
 
     render() {
-        console.debug('[render] [JJListView]');
         const { listContentMinHeight } = this.state;
         const {
             isSection,

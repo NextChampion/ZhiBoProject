@@ -20,7 +20,7 @@ const AnimatedViewPagerAndroid =
         ? Animated.createAnimatedComponent(ViewPagerAndroid)
         : undefined;
 
-export default class Header extends Component {
+export default class Content extends Component {
     static propTypes = {
         data: PropTypes.arrayOf(PropTypes.shape({})),
         prerenderingSiblingsNumber: PropTypes.number,

@@ -155,7 +155,7 @@ export default class RecommandScreen extends Component {
 
     render() {
         return (
-            <Container style={{ paddingBottom: UI.IS_IPHONE_X ? 24 : 0 }}>
+            <Container style={{ paddingBottom: 0 }}>
                 <SectionList
                     renderItem={this.renderItem}
                     ListHeaderComponent={this.renderListHeaderComponent}

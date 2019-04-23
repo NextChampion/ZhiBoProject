@@ -148,7 +148,7 @@ export default class JJScrollableTabView extends Component {
                                   tabLabel={d.title}
                                   style={[
                                       styles.innerContainer,
-                                      index > 0 && { marginTop: 64 },
+                                      //   index > 0 && { marginTop: 64 },
                                   ]}
                               >
                                   <Text>{d.title}</Text>
@@ -180,6 +180,5 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'green',
     },
 });
