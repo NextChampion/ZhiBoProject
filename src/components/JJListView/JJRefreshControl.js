@@ -11,8 +11,8 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import PropTypes from 'prop-types';
 // import UI from '../UI';
 export const RefreshControlStatus = {
-    default: 1,
-    holding: 2,
+    pullToRefresh: 1,
+    releaseToRefresh: 2,
     refreshing: 3,
     refreshed: 4,
 };
@@ -34,8 +34,15 @@ export default class JJRefreshControl extends Component {
     render() {
         console.debug('[render] JJRefreshControll');
         const { status } = this.props;
-        console.log('status', status);
-        if (status === 2) {
+        if (status === RefreshControlStatus.pullToRefresh) {
+            return (
+                <View style={styles.container}>
+                    <Image style={styles.image} />
+                    <Text style={styles.text}>下拉刷新</Text>
+                </View>
+            );
+        }
+        if (status === RefreshControlStatus.releaseToRefresh) {
             return (
                 <View style={styles.container}>
                     <Image style={styles.image} />
@@ -43,7 +50,7 @@ export default class JJRefreshControl extends Component {
                 </View>
             );
         }
-        if (status === 3) {
+        if (status === RefreshControlStatus.refreshing) {
             return (
                 <View style={styles.container}>
                     <Image style={styles.image} />
@@ -51,7 +58,7 @@ export default class JJRefreshControl extends Component {
                 </View>
             );
         }
-        if (status === 4) {
+        if (status === RefreshControlStatus.refreshed) {
             return (
                 <View style={styles.container}>
                     <Image style={styles.image} />

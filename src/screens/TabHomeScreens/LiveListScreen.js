@@ -81,11 +81,13 @@ export default class LiveListScreen extends Component {
     render() {
         console.debug('[render]', TAG);
         return (
-            <Container style={{ paddingBottom: UI.IS_IPHONE_X ? 24 : 0 }}>
+            <Container style={{ paddingBottom: 0 }}>
                 <JJListView
                     renderItem={this.renderFlatItem}
                     ListHeaderComponent={this.renderListHeaderComponent}
                     numColumns={2}
+                    showsVerticalScrollIndicator={false}
+                    columnWrapperStyle={this.columnWrapperStyle}
                     renderSectionHeader={this.renderSectionHeader}
                     data={LocalData.flatListData}
                     keyExtractor={item => item.roomId}
@@ -109,6 +111,9 @@ const styles = StyleSheet.create({
         borderTopWidth: StyleSheet.hairlineWidth,
         borderColor: UI.color.border,
         backgroundColor: UI.color.white1,
+    },
+    columnWrapperStyle: {
+        justifyContent: 'space-between',
     },
     refreshControl: {},
     swiperContainer: {
