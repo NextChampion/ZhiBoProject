@@ -36,14 +36,22 @@ export default class Splash extends Component {
         const components = [];
         if (data != null) {
             data.forEach(b => {
-                const { id } = b;
+                const { id, title } = b;
                 if (id === 1) {
                     components.push(
-                        <RecommandScreen key={id} {...this.props} />,
+                        <RecommandScreen
+                            tabLabel={title}
+                            key={id}
+                            {...this.props}
+                        />,
                     );
                 } else {
                     components.push(
-                        <LiveListScreen key={id} {...this.props} />,
+                        <LiveListScreen
+                            tabLabel={title}
+                            key={id}
+                            {...this.props}
+                        />,
                     );
                 }
             });
@@ -54,11 +62,8 @@ export default class Splash extends Component {
     render() {
         const { list } = this.state;
         return (
-            <Container style={{ flex: 1 }}>
-                <CXScrollableTabView
-                    data={list}
-                    tabItemStyle={styles.tabItemStyle}
-                >
+            <Container style={{ flex: 1, backgroundColor: 'green' }}>
+                <CXScrollableTabView tabItemStyle={styles.tabItemStyle}>
                     {this.renderGameTypeView(list)}
                 </CXScrollableTabView>
             </Container>

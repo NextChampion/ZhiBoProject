@@ -39,10 +39,6 @@ export default class JJScrollableTabView extends Component {
         this.currentIndex = 0;
     }
 
-    componentDidMount() {}
-
-    componentWillUnmount() {}
-
     onTabbarChanged = index => {
         this.currentIndex = index;
         const { onTabBarChenged } = this.props;
@@ -78,6 +74,11 @@ export default class JJScrollableTabView extends Component {
             headerStyle,
             contentStyle,
         } = this.props;
+        const headerData = children.map(c => {
+            const { props } = c;
+            const { tabLabel } = props;
+            return { title: tabLabel };
+        });
         if (isAbsolutePosition) {
             return (
                 <View style={styles.container}>
@@ -113,7 +114,7 @@ export default class JJScrollableTabView extends Component {
                         ref={a => {
                             this.tabbar = a;
                         }}
-                        data={data}
+                        data={headerData}
                         onItemChanged={this.onTabbarChanged}
                     />
                 </View>
@@ -127,7 +128,7 @@ export default class JJScrollableTabView extends Component {
                     ref={a => {
                         this.tabbar = a;
                     }}
-                    data={data}
+                    data={headerData}
                     onItemChanged={this.onTabbarChanged}
                     style={styles.header}
                 />
@@ -163,6 +164,7 @@ export default class JJScrollableTabView extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'blue',
     },
     tabbarContainer: {
         height: 44,
