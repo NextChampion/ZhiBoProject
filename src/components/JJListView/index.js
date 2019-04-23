@@ -129,6 +129,8 @@ export default class JJListView extends Component {
             this.onRefresh();
             return;
         }
+        // 如果不触发刷新,Android则需要让列表滚回到默认位置;
+        this.listScrollToOffset(RefreshControlStatus.pullToRefresh);
         this.changeRefreshState(RefreshControlStatus.pullToRefresh);
     };
 
@@ -143,19 +145,18 @@ export default class JJListView extends Component {
     };
 
     // 每次滚动完毕后,iOS的会自动回滚,但是Android的不可以,所以需要手动调用滚动函数,使的Android也滚动到某个位置,不同的状态对应的对应不一样
-    scrollToOffset = () => {
+    listScrollToOffset = state => {
         // 如果是iOS 则不需要回滚
         if (Platform.OS === 'ios') {
             return;
         }
-        const offset = this.getOffset();
+        const offset = this.getOffset(state);
         if (this.listView) {
             this.listView.scrollToOffset({ offset, animated: true });
         }
     };
 
-    getOffset = () => {
-        const { refreshControlStatus } = this.state;
+    getOffset = refreshControlStatus => {
         let offset = 0;
         switch (refreshControlStatus) {
             // 下拉刷新
@@ -196,7 +197,7 @@ export default class JJListView extends Component {
                 refreshControlStatus: state,
             },
             () => {
-                this.scrollToOffset();
+                this.listScrollToOffset(state);
                 if (callBack) {
                     callBack();
                 }

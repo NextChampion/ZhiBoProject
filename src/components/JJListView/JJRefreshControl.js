@@ -9,6 +9,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import PropTypes from 'prop-types';
+import JJRefreshing from './JJRefreshing';
 // import UI from '../UI';
 export const RefreshControlStatus = {
     pullToRefresh: 1,
@@ -16,6 +17,9 @@ export const RefreshControlStatus = {
     refreshing: 3,
     refreshed: 4,
 };
+
+const pullImg = require('./img/pull_to_refresh.png');
+const releaseImg = require('./img/release_to_refresh.png');
 
 export default class JJRefreshControl extends Component {
     static propTypes = {
@@ -37,7 +41,7 @@ export default class JJRefreshControl extends Component {
         if (status === RefreshControlStatus.pullToRefresh) {
             return (
                 <View style={styles.container}>
-                    <Image style={styles.image} />
+                    <Image source={pullImg} style={styles.image} />
                     <Text style={styles.text}>下拉刷新</Text>
                 </View>
             );
@@ -45,7 +49,7 @@ export default class JJRefreshControl extends Component {
         if (status === RefreshControlStatus.releaseToRefresh) {
             return (
                 <View style={styles.container}>
-                    <Image style={styles.image} />
+                    <Image source={releaseImg} style={styles.image} />
                     <Text style={styles.text}>松开刷新</Text>
                 </View>
             );
@@ -53,15 +57,16 @@ export default class JJRefreshControl extends Component {
         if (status === RefreshControlStatus.refreshing) {
             return (
                 <View style={styles.container}>
-                    <Image style={styles.image} />
-                    <Text style={styles.text}>刷新中...</Text>
+                    <JJRefreshing
+                        imageStyle={styles.image}
+                        textStyle={styles.text}
+                    />
                 </View>
             );
         }
         if (status === RefreshControlStatus.refreshed) {
             return (
                 <View style={styles.container}>
-                    <Image style={styles.image} />
                     <Text style={styles.text}>刷新成功</Text>
                 </View>
             );
@@ -69,7 +74,7 @@ export default class JJRefreshControl extends Component {
         // status === 1
         return (
             <View style={styles.container}>
-                <Image style={styles.image} />
+                <Image source={pullImg} style={styles.image} />
                 <Text style={styles.text}>下拉刷新</Text>
             </View>
         );
@@ -84,9 +89,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     image: {
-        width: 30,
-        height: 30,
-        backgroundColor: 'red',
+        width: 19,
+        height: 19,
         marginRight: 12,
     },
     text: {
