@@ -35,6 +35,7 @@ export default class JJListView extends Component {
              * refreshed: 4,
              */
             refreshControlStatus: RefreshControlStatus.pullToRefresh,
+            listContentMinHeight: 0, // 内容的最小值
         };
         // 记录当前的滑动的距离
         this.currentOffsetY = 0;
@@ -71,7 +72,7 @@ export default class JJListView extends Component {
                 if (this.listView) {
                     this.listView.scrollToOffset(params);
                 }
-            }, 50);
+            }, 100);
         }
     }
 
@@ -119,13 +120,20 @@ export default class JJListView extends Component {
             onScrollEndDrag();
         }
         const { actualRefreshThreshold } = this;
-        if (this.currentOffsetY > actualRefreshThreshold) {
+        if (this.currentOffsetY >= actualRefreshThreshold) {
             if (
                 this.currentRefreshStatus !==
                 RefreshControlStatus.releaseToRefresh
             ) {
                 return;
             }
+            this.onRefresh();
+            return;
+        }
+        // 补充: 有时候如果将偏移量拖动到临界值的时候,可能出现文字已经变更为松开刷新,但是松开后,直接收回的问题, 此处除了前面判断偏移量以外,再加一个state的判断
+        if (
+            this.currentRefreshStatus === RefreshControlStatus.releaseToRefresh
+        ) {
             this.onRefresh();
             return;
         }
@@ -187,6 +195,44 @@ export default class JJListView extends Component {
         }, 1000);
     };
 
+    onListLayout = event => {
+        const { onLayout } = this.props;
+        const { height } = event.nativeEvent.layout;
+        const { listContentMinHeight } = this.state;
+        if (listContentMinHeight < height) {
+            if (Platform.OS === 'android') {
+                this.setState(
+                    {
+                        listContentMinHeight:
+                            height + this.androidDefaultOffset,
+                    },
+                    () => {
+                        const params = {
+                            offset: this.androidDefaultOffset,
+                            animated: true,
+                        };
+                        if (this.listView) {
+                            this.listView.scrollToOffset(params);
+                        }
+                    },
+                );
+            } else {
+                this.setState({ listContentMinHeight: height }, () => {
+                    const params = {
+                        offset: this.androidDefaultOffset,
+                        animated: true,
+                    };
+                    if (this.listView) {
+                        this.listView.scrollToOffset(params);
+                    }
+                });
+            }
+        }
+        if (onLayout) {
+            onLayout(event);
+        }
+    };
+
     changeRefreshState = (state, callBack = null) => {
         if (this.currentRefreshStatus === state) {
             return;
@@ -224,12 +270,14 @@ export default class JJListView extends Component {
     };
 
     render() {
-        console.debug('[render] [JJListView]', this.props);
+        console.debug('[render] [JJListView]');
+        const { listContentMinHeight } = this.state;
         const {
             isSection,
             onScroll,
             ListHeaderComponent,
             onScrollEndDrag,
+            contentContainerStyle,
             ...others
         } = this.props;
         if (!isSection) {
@@ -237,6 +285,11 @@ export default class JJListView extends Component {
                 <FlatList
                     ref={a => {
                         this.listView = a;
+                    }}
+                    onLayout={this.onListLayout}
+                    contentContainerStyle={{
+                        ...contentContainerStyle,
+                        minHeight: listContentMinHeight,
                     }}
                     onScroll={this.onScroll}
                     onScrollEndDrag={this.onScrollEndDrag}
@@ -250,6 +303,12 @@ export default class JJListView extends Component {
                 ref={a => {
                     this.listView = a;
                 }}
+                onLayout={this.onListLayout}
+                // contentContainerStyle={{
+                //     ...contentContainerStyle,
+                //     minHeight: listContentMinHeight,
+                // }}
+                contentContainerStyle={{ minHeight: listContentMinHeight }}
                 onScroll={this.onScroll}
                 onScrollEndDrag={this.onScrollEndDrag}
                 ListHeaderComponent={() => this.renderListHeaderComponent()} // 不知道为什么不使用箭头函数就不会调用
