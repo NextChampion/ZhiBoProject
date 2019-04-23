@@ -18,6 +18,11 @@ class Splash extends Component {
         showsPagination: true,
     };
 
+    componentWillMount() {
+        const { version } = this.props;
+        console.log('version', version);
+    }
+
     componentDidMount() {}
 
     onStart = () => {
@@ -62,12 +67,12 @@ class Splash extends Component {
                     <View style={styles.slide1}>
                         <Text style={styles.text}>Hello Swiper</Text>
                     </View>
-                    {/* <View style={styles.slide2}>
-            <Text style={styles.text}>Beautiful</Text>
-          </View>
-          <View style={styles.slide3}>
-            <Text style={styles.text}>Beautiful</Text>
-          </View> */}
+                    <View style={styles.slide2}>
+                        <Text style={styles.text}>Beautiful</Text>
+                    </View>
+                    <View style={styles.slide3}>
+                        <Text style={styles.text}>Beautiful</Text>
+                    </View>
                 </Swiper>
             </Container>
         );

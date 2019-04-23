@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 
 export const version = {
     default: Immutable.fromJS({
-        test: 1,
+        versionCode: 1,
     }),
     persist: true,
     actions: {

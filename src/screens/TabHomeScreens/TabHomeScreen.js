@@ -36,7 +36,7 @@ export default class Splash extends Component {
         const components = [];
         if (data != null) {
             data.forEach(b => {
-                const { id, title } = b;
+                const { id } = b;
                 if (id === 1) {
                     components.push(
                         <RecommandScreen key={id} {...this.props} />,

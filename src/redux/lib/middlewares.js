@@ -1,16 +1,16 @@
 import mapValues from 'lodash/mapValues';
+import { createLogger } from 'redux-logger';
 
 const middlewares = [];
-// if (__DEV__) {
-const { createLogger } = require('redux-logger');
-
-middlewares.push(
-    createLogger({
-        collapsed: true,
-        stateTransformer: state =>
-            mapValues(state, s => (s.toJS ? s.toJS() : s)),
-    }),
-);
-// }
+// eslint-disable-next-line no-undef
+if (__DEV__) {
+    middlewares.push(
+        createLogger({
+            collapsed: true,
+            stateTransformer: state =>
+                mapValues(state, s => (s.toJS ? s.toJS() : s)),
+        }),
+    );
+}
 
 export default middlewares;
