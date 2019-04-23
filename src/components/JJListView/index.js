@@ -1,3 +1,6 @@
+/**
+ * 支持下拉刷新功能的列表组件
+ */
 import React, { Component } from 'react';
 import {
     StyleSheet,
@@ -86,6 +89,10 @@ export default class JJListView extends Component {
     };
 
     onScroll = event => {
+        const { onScroll } = this.props;
+        if (onScroll) {
+            onScroll(event);
+        }
         const { actualRefreshThreshold } = this;
         // y值为负数,加个负号,表示下拉的偏移量
         this.currentOffsetY =
@@ -106,9 +113,11 @@ export default class JJListView extends Component {
         }
     };
 
-    onScrollBeginDrag = () => {};
-
     onScrollEndDrag = () => {
+        const { onScrollEndDrag } = this.props;
+        if (onScrollEndDrag) {
+            onScrollEndDrag();
+        }
         const { actualRefreshThreshold } = this;
         if (this.currentOffsetY > actualRefreshThreshold) {
             if (
@@ -219,7 +228,6 @@ export default class JJListView extends Component {
             isSection,
             onScroll,
             ListHeaderComponent,
-            onScrollBeginDrag,
             onScrollEndDrag,
             ...others
         } = this.props;
@@ -230,7 +238,6 @@ export default class JJListView extends Component {
                         this.listView = a;
                     }}
                     onScroll={this.onScroll}
-                    onScrollBeginDrag={this.onScrollBeginDrag}
                     onScrollEndDrag={this.onScrollEndDrag}
                     ListHeaderComponent={() => this.renderListHeaderComponent()}
                     {...others}
@@ -243,7 +250,6 @@ export default class JJListView extends Component {
                     this.listView = a;
                 }}
                 onScroll={this.onScroll}
-                onScrollBeginDrag={this.onScrollBeginDrag}
                 onScrollEndDrag={this.onScrollEndDrag}
                 ListHeaderComponent={() => this.renderListHeaderComponent()} // 不知道为什么不使用箭头函数就不会调用
                 {...others}
