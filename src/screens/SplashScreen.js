@@ -20,7 +20,10 @@ class Splash extends Component {
 
     componentWillMount() {
         const { version } = this.props;
-        console.log('version', version);
+        const versionCode = version.get('versionCode');
+        if (versionCode > 0) {
+            this.onStart();
+        }
     }
 
     componentDidMount() {}
