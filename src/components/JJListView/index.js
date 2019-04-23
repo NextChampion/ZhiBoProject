@@ -109,7 +109,7 @@ export default class RecommandScreen extends Component {
     };
 
     render() {
-        console.debug('[render] [JJListView]');
+        console.debug('[render] [JJListView]', this.props);
         const {
             isSection,
             onScroll,

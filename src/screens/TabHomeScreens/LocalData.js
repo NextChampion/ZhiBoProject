@@ -275,4 +275,49 @@ const roomListData = [
         ],
     },
 ];
-export default { listData, swiperListData, tabbarListData, roomListData };
+
+const flatListData = [
+    {
+        name: '吃喝玩乐1',
+        coverUrl:
+            'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555047295024&di=ba6ed5d1a13db72ac43efb1cab7cb0e7&imgtype=0&src=http%3A%2F%2Fgbres.dfcfw.com%2FFiles%2Fpicture%2F20171107%2FF4AEC1C625F922BFA6423FCA7438E98C.jpg',
+        anchorName: '李四',
+        category: '户外',
+        popularity: 1000000,
+        roomId: 40000,
+    },
+    {
+        name: '吃喝玩乐2',
+        coverUrl:
+            'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555047295024&di=ba6ed5d1a13db72ac43efb1cab7cb0e7&imgtype=0&src=http%3A%2F%2Fgbres.dfcfw.com%2FFiles%2Fpicture%2F20171107%2FF4AEC1C625F922BFA6423FCA7438E98C.jpg',
+        anchorName: '后裔',
+        category: '户外',
+        popularity: 93000,
+        roomId: 40001,
+    },
+    {
+        name: '吃喝玩乐3',
+        coverUrl:
+            'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555047295024&di=ba6ed5d1a13db72ac43efb1cab7cb0e7&imgtype=0&src=http%3A%2F%2Fgbres.dfcfw.com%2FFiles%2Fpicture%2F20171107%2FF4AEC1C625F922BFA6423FCA7438E98C.jpg',
+        anchorName: '李四',
+        category: '二次元',
+        popularity: 12002,
+        roomId: 40002,
+    },
+    {
+        name: '吃喝玩乐4',
+        coverUrl:
+            'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555047295024&di=ba6ed5d1a13db72ac43efb1cab7cb0e7&imgtype=0&src=http%3A%2F%2Fgbres.dfcfw.com%2FFiles%2Fpicture%2F20171107%2FF4AEC1C625F922BFA6423FCA7438E98C.jpg',
+        anchorName: '李四',
+        category: '美食',
+        popularity: 342233,
+        roomId: 40003,
+    },
+];
+export default {
+    listData,
+    swiperListData,
+    tabbarListData,
+    roomListData,
+    flatListData,
+};

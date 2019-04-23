@@ -48,6 +48,10 @@ export default class LiveListScreen extends Component {
         );
     };
 
+    renderFlatItem = ({ item }) => {
+        return <RoomListItem key={item.roomId} data={item} />;
+    };
+
     renderSectionHeader = ({ section: { title } }) => (
         <View style={styles.headerContainerView}>
             <Text key={title} style={{ fontWeight: 'bold' }}>
@@ -79,12 +83,11 @@ export default class LiveListScreen extends Component {
         return (
             <Container style={{ paddingBottom: UI.IS_IPHONE_X ? 24 : 0 }}>
                 <JJListView
-                    isSection
-                    renderItem={this.renderItem}
+                    renderItem={this.renderFlatItem}
                     ListHeaderComponent={this.renderListHeaderComponent}
                     numColumns={2}
                     renderSectionHeader={this.renderSectionHeader}
-                    sections={LocalData.roomListData}
+                    data={LocalData.flatListData}
                     keyExtractor={item => item.roomId}
                 />
             </Container>
