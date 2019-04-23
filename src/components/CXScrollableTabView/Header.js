@@ -184,7 +184,7 @@ export default class Header extends Component {
                 return { viewStyle, textStyle };
             }
             viewStyle = styles.textViewStyle;
-            textStyle = styles.textStyle;
+            textStyle = styles.textStyle1;
             return { viewStyle, textStyle };
         }
         // index为第一个时候单独处理时候
@@ -229,7 +229,7 @@ export default class Header extends Component {
             textStyle = [styles.textStyle, { color: '#000000', opacity: 0.6 }];
         } else {
             viewStyle = styles.textViewStyle;
-            textStyle = styles.textStyle;
+            textStyle = styles.textStyle1;
         }
         return { viewStyle, textStyle };
     };
@@ -241,7 +241,7 @@ export default class Header extends Component {
             <Button
                 onPress={() => this.onClickItem({ item, index })}
                 style={styles.tabbar}
-                onLayout={this.measureTab.bind(this, index)}
+                onLayout={e => this.measureTab(index, e)}
             >
                 <View style={viewStyle}>
                     <Text style={textStyle}>{item.title || item.name}</Text>
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffc000',
         bottom: 0,
     },
-    textStyle: {
+    textStyle1: {
         fontSize: 14,
         color: '#545454',
     },
@@ -329,11 +329,11 @@ const styles = StyleSheet.create({
     },
     selectedTextViewStyle: {
         paddingHorizontal: 10,
-        borderRadius: 12,
         overflow: 'hidden',
-        height: 24,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: UI.color.primary1,
+        height: 24,
+        borderRadius: 12,
     },
 });
