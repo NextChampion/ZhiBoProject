@@ -86,6 +86,7 @@ export default class LiveListScreen extends Component {
                     renderItem={this.renderFlatItem}
                     ListHeaderComponent={this.renderListHeaderComponent}
                     numColumns={2}
+                    refreshThreshold={50}
                     showsVerticalScrollIndicator={false}
                     columnWrapperStyle={styles.columnWrapperStyle}
                     renderSectionHeader={this.renderSectionHeader}

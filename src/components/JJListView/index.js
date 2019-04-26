@@ -43,25 +43,33 @@ export default class JJListView extends Component {
         this.currentOffsetY = 0;
         // 因为修改state是异步的,所以在修改state的同时,为了保证一些状态变更时候的问题,通过变量也记录一下
         this.currentRefreshStatus = RefreshControlStatus.pullToRefresh;
-        // 刷新视图的高度
-        this.refreshControlHeight = 50;
         // 该对象仅仅用来处理刷新视图的显示区域,如果列表内指定了header,对应的header高度与该对象无关
         this.HeaderSize = {};
-        // android平台默认上移的高度
-        this.androidDefaultOffset = 0;
         // 实际的临界值,为了区分不同平台的临界值,该值在不同平台根据属性内的值计算后得出
         this.actualRefreshThreshold = 68;
+        // android平台默认默认的原点位置,iOS因为列表有弹簧效果,所以原点位置为0, Android的原点需要通过设定的上面空白区域的高度加上刷新视图的高度,如果有必要可能还需要加上statusbar的高度
+        this.androidOriginY = 0;
+        // 当前页面是否处于scrolling状态中
+        this.isScrolling = false;
     }
 
     componentWillMount() {
-        const { refreshControlHeight } = this.props;
+        /**
+         * 布局相关的数据的初始化
+         */
+        const { refreshControlHeight, refreshThreshold } = this.props;
         this.HeaderSize = {
             height: Platform.OS === 'ios' ? 0 : 100,
             marginTop: Platform.OS === 'ios' ? -refreshControlHeight : 0, // ios可以通过margintop的方式,把刷新视图隐藏在屏幕之外, Android则不行
-            blankAresHeight: Platform.OS === 'ios' ? 0 : 50, // 只用于Android
+            blankAresHeight: Platform.OS === 'ios' ? 0 : 50, // iOS为0, 只用于Android
         };
-        this.androidDefaultOffset =
-            this.refreshControlHeight + this.HeaderSize.blankAresHeight;
+        // 通过计算,得出Android默认滚动到的坐标位置,即坐标"伪原点", 每次刷新结束后,都要滚动到这个位置
+        this.androidOriginY =
+            refreshControlHeight + this.HeaderSize.blankAresHeight;
+        this.actualRefreshThreshold =
+            Platform.OS === 'ios'
+                ? refreshThreshold
+                : this.androidOriginY - refreshThreshold;
     }
 
     componentDidMount() {
@@ -69,14 +77,23 @@ export default class JJListView extends Component {
         if (Platform.OS === 'android') {
             this.initializationTimer = setTimeout(() => {
                 const params = {
-                    offset: this.androidDefaultOffset,
+                    offset: this.androidOriginY,
                     animated: false,
                 };
-                if (this.listView) {
-                    this.listView.scrollToOffset(params);
-                }
+                this.callListScrollWithParams(params);
             }, 100);
         }
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        // 此处未做性能优化
+        // 如果正在拖动中,则不作处理
+        if (!this.isScrolling) {
+            this.listScrollToOffsetWithRefreshState(
+                nextState.refreshControlStatus,
+            );
+        }
+        return true;
     }
 
     componentWillUnmount() {
@@ -85,6 +102,9 @@ export default class JJListView extends Component {
         }
     }
 
+    /**
+     * 获取组件header的marginTop的值,
+     */
     getMarginTop = refreshControlStatus => {
         if (refreshControlStatus === RefreshControlStatus.pullToRefresh) {
             return this.HeaderSize.marginTop;
@@ -92,59 +112,69 @@ export default class JJListView extends Component {
         return 0;
     };
 
+    /**
+     * 组件开始滚动的方法
+     */
+    onScrollBeginDrag = () => {
+        this.isScrolling = true;
+    };
+
+    /**
+     * 组件滚动时候的回调方法
+     */
     onScroll = event => {
         const { onScroll } = this.props;
         if (onScroll) {
             onScroll(event);
         }
-        const { actualRefreshThreshold } = this;
         // y值为负数,加个负号,表示下拉的偏移量
-        this.currentOffsetY =
-            Platform.OS === 'ios'
-                ? -event.nativeEvent.contentOffset.y
-                : this.androidDefaultOffset - event.nativeEvent.contentOffset.y;
-        // console.log('onScroll', this.currentOffsetY, actualRefreshThreshold);
-        if (this.currentOffsetY === RefreshControlStatus.refreshing) {
+        this.currentOffsetY = event.nativeEvent.contentOffset.y;
+        // 如果处于下拉刷新的状态,则需要变成松开刷新
+        const { refreshControlStatus } = this.state;
+        //  如果不是下拉刷新和松开刷新的状态,即处于正在刷新,刷新成功状态,则return什么也不做
+        if (
+            refreshControlStatus === RefreshControlStatus.refreshing ||
+            refreshControlStatus === RefreshControlStatus.refreshed
+        ) {
             return;
         }
-        if (this.currentOffsetY > actualRefreshThreshold) {
-            if (
-                this.currentRefreshStatus !== RefreshControlStatus.pullToRefresh
-            ) {
-                return;
-            }
+        // 如果处于下拉刷新的状态,当滚动的位置 小于临界值,就将状态改为松开刷新 大于临界值 改为下拉刷新
+        const { actualRefreshThreshold } = this;
+        if (this.currentOffsetY < actualRefreshThreshold) {
             this.changeRefreshState(RefreshControlStatus.releaseToRefresh);
+        } else {
+            this.changeRefreshState(RefreshControlStatus.pullToRefresh);
         }
     };
 
+    /**
+     * 当滚动结束时候的回调
+     */
     onScrollEndDrag = () => {
+        this.isScrolling = false;
+        // 处理原始属性的内容,做一次调用
         const { onScrollEndDrag } = this.props;
         if (onScrollEndDrag) {
             onScrollEndDrag();
         }
-        const { actualRefreshThreshold } = this;
-        if (this.currentOffsetY >= actualRefreshThreshold) {
-            if (
-                this.currentRefreshStatus !==
-                RefreshControlStatus.releaseToRefresh
-            ) {
-                return;
-            }
-            this.onRefresh();
-            return;
+        const { refreshControlStatus } = this.state;
+        switch (refreshControlStatus) {
+            // 如果当前仍处于松开刷新的状态
+            case RefreshControlStatus.releaseToRefresh:
+                this.onRefresh();
+                break;
+            default:
+                // 如果当前仍处于下拉刷新的状态,直接让页面滚回顶部
+                // 如果当前仍处于刷新中的的状态,直接让页面滚回刷新中的样式
+                // 如果当前仍处于刷新成功的状态,直接让页面滚回刷新成功的样子
+                this.listScrollToOffsetWithRefreshState(refreshControlStatus);
+                break;
         }
-        // 补充: 有时候如果将偏移量拖动到临界值的时候,可能出现文字已经变更为松开刷新,但是松开后,直接收回的问题, 此处除了前面判断偏移量以外,再加一个state的判断
-        if (
-            this.currentRefreshStatus === RefreshControlStatus.releaseToRefresh
-        ) {
-            this.onRefresh();
-            return;
-        }
-        // 如果不触发刷新,Android则需要让列表滚回到默认位置;
-        this.listScrollToOffset(RefreshControlStatus.pullToRefresh);
-        this.changeRefreshState(RefreshControlStatus.pullToRefresh);
     };
 
+    /**
+     * 刷新方法
+     */
     onRefresh = () => {
         this.changeRefreshState(RefreshControlStatus.refreshing);
         setTimeout(() => {
@@ -156,35 +186,67 @@ export default class JJListView extends Component {
     };
 
     // 每次滚动完毕后,iOS的会自动回滚,但是Android的不可以,所以需要手动调用滚动函数,使的Android也滚动到某个位置,不同的状态对应的对应不一样
-    listScrollToOffset = state => {
+    listScrollToOffsetWithRefreshState = state => {
         // 如果是iOS 则不需要回滚
         if (Platform.OS === 'ios') {
             return;
         }
+        if (!state) {
+            return;
+        }
         const offset = this.getOffset(state);
+        const params = {
+            offset,
+            animated: true,
+        };
+        console.log('listScrollToOffsetWithRefreshState', params);
+        this.callListScrollWithParams(params);
+    };
+
+    /**
+     * 调用组件的滚动方法,param表示滚动的参数
+     */
+    callListScrollWithParams = params => {
+        console.log('callListScrollWithParams', params);
         if (this.listView) {
-            this.listView.scrollToOffset({ offset, animated: true });
+            const { isSection } = this.props;
+            if (isSection) {
+                const { offset, animated } = params;
+                const newParams = {
+                    viewPosition: offset,
+                    sectionIndex: 0,
+                    itemIndex: -1,
+                    animated,
+                };
+                this.listView.scrollToLocation(newParams);
+            } else {
+                this.listView.scrollToOffset(params);
+            }
         }
     };
 
+    /**
+     * 根据不同的状态获取当前的偏移量
+     */
     getOffset = refreshControlStatus => {
         let offset = 0;
+        const { refreshControlHeight } = this.props;
         switch (refreshControlStatus) {
             // 下拉刷新
             case RefreshControlStatus.pullToRefresh:
-                offset = this.androidDefaultOffset;
+                offset = this.androidOriginY;
                 break;
             // 松开刷新
             case RefreshControlStatus.releaseToRefresh:
-                offset = this.androidDefaultOffset - this.refreshControlHeight;
+                offset = this.androidOriginY - refreshControlHeight;
                 break;
             // 刷新中
             case RefreshControlStatus.refreshing:
-                offset = this.androidDefaultOffset - this.refreshControlHeight;
+                offset = this.androidOriginY - refreshControlHeight;
                 break;
             // 刷新成功
             case RefreshControlStatus.refreshed:
-                offset = this.androidDefaultOffset - this.refreshControlHeight;
+                offset = this.androidOriginY - refreshControlHeight;
                 break;
             default:
                 break;
@@ -192,12 +254,18 @@ export default class JJListView extends Component {
         return offset;
     };
 
+    /**
+     * 刷新完成的方法
+     */
     onRefreshFinished = () => {
         setTimeout(() => {
             this.changeRefreshState(RefreshControlStatus.pullToRefresh);
-        }, 1000);
+        }, 500);
     };
 
+    /**
+     * 组件布局完成后的回调方法,通过该方法获取到当前列表组件的高度,然后计算拼接上刷新视图后 最小高度
+     */
     onListLayout = event => {
         const { onLayout } = this.props;
         const { height } = event.nativeEvent.layout;
@@ -205,7 +273,7 @@ export default class JJListView extends Component {
         if (listContentMinHeight < height) {
             if (Platform.OS === 'android') {
                 this.setState({
-                    listContentMinHeight: height + this.androidDefaultOffset,
+                    listContentMinHeight: height + this.androidOriginY,
                 });
             }
         }
@@ -214,6 +282,9 @@ export default class JJListView extends Component {
         }
     };
 
+    /**
+     * 修改当前组件刷新的状态值
+     */
     changeRefreshState = (state, callBack = null) => {
         if (this.currentRefreshStatus === state) {
             return;
@@ -223,15 +294,13 @@ export default class JJListView extends Component {
             {
                 refreshControlStatus: state,
             },
-            () => {
-                this.listScrollToOffset(state);
-                if (callBack) {
-                    callBack();
-                }
-            },
+            callBack,
         );
     };
 
+    /**
+     * 渲染header
+     */
     renderListHeaderComponent = () => {
         const { ListHeaderComponent } = this.props;
         const { refreshControlStatus } = this.state;
@@ -272,6 +341,7 @@ export default class JJListView extends Component {
                         ...contentContainerStyle,
                         minHeight: listContentMinHeight,
                     }}
+                    onScrollBeginDrag={this.onScrollBeginDrag}
                     onScroll={this.onScroll}
                     onScrollEndDrag={this.onScrollEndDrag}
                     ListHeaderComponent={() => this.renderListHeaderComponent()}
@@ -310,7 +380,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderTopWidth: StyleSheet.hairlineWidth,
         borderColor: UI.color.border,
-        backgroundColor: UI.color.white1,
+        // backgroundColor: UI.color.white1,
     },
     refreshControl: {},
     wrapper: {},
