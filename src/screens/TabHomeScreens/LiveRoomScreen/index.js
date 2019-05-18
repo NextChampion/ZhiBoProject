@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import Swiper from 'react-native-swiper';
 // import { connect } from '../../../redux';
@@ -7,6 +7,7 @@ import Container from '../../../components/Container';
 import RoomListItem from '../../../components/RoomListItem';
 import UI from '../../../UI';
 import LocalData from '../LocalData';
+import NavigationHeader from '../../../components/NavigatorHeader';
 
 const TAG = '[]LiveRoomScreen]';
 
@@ -23,6 +24,13 @@ export default class LiveRoomScreen extends Component {
     }
 
     componentDidMount() {}
+
+    goBack = () => {
+        const { navigation } = this.props;
+        if (navigation) {
+            navigation.goBack();
+        }
+    };
 
     renderItem = ({ index, section }) => {
         const numColumns = 2;
@@ -80,13 +88,21 @@ export default class LiveRoomScreen extends Component {
     render() {
         console.debug('[render]', TAG);
         return (
-            <Container style={{ paddingBottom: 0 }}>
+            <Container style={{ paddingBottom: 0, marginTop: 0 }}>
                 <View style={styles.playerContainer}>
                     <Text>播放器</Text>
                 </View>
                 <View style={styles.liveInfoContainer}>
                     <Text>房间</Text>
                 </View>
+                <NavigationHeader
+                    leftItem={
+                        <TouchableOpacity onPress={this.goBack}>
+                            <Text style={styles.backText}>返回</Text>
+                        </TouchableOpacity>
+                    }
+                    isAbsolute
+                />
             </Container>
         );
     }
@@ -100,5 +116,8 @@ const styles = StyleSheet.create({
     liveInfoContainer: {
         flex: 2,
         backgroundColor: 'red',
+    },
+    backText: {
+        color: 'white',
     },
 });

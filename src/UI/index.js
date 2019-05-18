@@ -21,6 +21,7 @@ const color = {
     unselected: '#cdcdcd',
     border: '#D8D7DC',
     disable: '#E6EFFA',
+    transparent: 'transparent',
 
     bg1: '#FFFFFF', // '#FCFDFF',
     bg2: '#F5F9FD',
