@@ -8,6 +8,7 @@ import RoomListItem from '../../../components/RoomListItem';
 import UI from '../../../UI';
 import LocalData from '../LocalData';
 import NavigationHeader from '../../../components/NavigatorHeader';
+import LiveRoomTabView from './LiveRoomTabView';
 
 const TAG = '[]LiveRoomScreen]';
 
@@ -93,7 +94,7 @@ export default class LiveRoomScreen extends Component {
                     <Text>播放器</Text>
                 </View>
                 <View style={styles.liveInfoContainer}>
-                    <Text>房间</Text>
+                    <LiveRoomTabView />
                 </View>
                 <NavigationHeader
                     leftItem={
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
     },
     liveInfoContainer: {
         flex: 2,
-        backgroundColor: 'red',
+        backgroundColor: UI.color.bg1,
     },
     backText: {
         color: 'white',
