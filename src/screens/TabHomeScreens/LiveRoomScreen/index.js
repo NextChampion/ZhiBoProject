@@ -26,6 +26,13 @@ export default class LiveRoomScreen extends Component {
 
     componentDidMount() {}
 
+    goBack = () => {
+        const { navigation } = this.props;
+        if (navigation) {
+            navigation.goBack();
+        }
+    };
+
     render() {
         console.debug('[render]', TAG);
         return (
