@@ -37,6 +37,9 @@ const color = {
     gray2: '#2F405085',
     gray9: '#1F223384',
     gray10: '#1F223316',
+
+    // 图标的颜色
+    gray: '#bfbfbf',
 };
 
 const size = {

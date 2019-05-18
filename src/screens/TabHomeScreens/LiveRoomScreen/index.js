@@ -26,66 +26,6 @@ export default class LiveRoomScreen extends Component {
 
     componentDidMount() {}
 
-    goBack = () => {
-        const { navigation } = this.props;
-        if (navigation) {
-            navigation.goBack();
-        }
-    };
-
-    renderItem = ({ index, section }) => {
-        const numColumns = 2;
-        if (index % numColumns !== 0) return null;
-        const items = [];
-        for (let i = index; i < index + numColumns; i += 1) {
-            if (i >= section.data.length) {
-                break;
-            }
-            const data = section.data[i];
-            items.push(<RoomListItem key={data.roomId} data={data} />);
-        }
-        return (
-            <View
-                style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                }}
-            >
-                {items}
-            </View>
-        );
-    };
-
-    renderFlatItem = ({ item }) => {
-        return <RoomListItem key={item.roomId} data={item} />;
-    };
-
-    renderSectionHeader = ({ section: { title } }) => (
-        <View style={styles.headerContainerView}>
-            <Text key={title} style={{ fontWeight: 'bold' }}>
-                {title}
-            </Text>
-        </View>
-    );
-
-    renderListHeaderComponent = () => {
-        return (
-            <View style={styles.swiperContainer}>
-                <Swiper style={styles.wrapper} autoplay>
-                    <View style={styles.slide1}>
-                        <Text style={styles.text}>Hello Swiper</Text>
-                    </View>
-                    <View style={styles.slide2}>
-                        <Text style={styles.text}>Beautiful</Text>
-                    </View>
-                    <View style={styles.slide3}>
-                        <Text style={styles.text}>And simple</Text>
-                    </View>
-                </Swiper>
-            </View>
-        );
-    };
-
     render() {
         console.debug('[render]', TAG);
         return (
