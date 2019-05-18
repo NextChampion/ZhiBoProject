@@ -98,6 +98,13 @@ export default class RecommandScreen extends Component {
         this.currentRefreshStatus = state;
     };
 
+    onClickItem = () => {
+        const { navigation } = this.props;
+        if (navigation) {
+            navigation.navigate('LiveRoom');
+        }
+    };
+
     renderItem = ({ index, section }) => {
         const numColumns = 2;
         if (index % numColumns !== 0) return null;
@@ -107,7 +114,13 @@ export default class RecommandScreen extends Component {
                 break;
             }
             const data = section.data[i];
-            items.push(<RoomListItem key={data.roomId} data={data} />);
+            items.push(
+                <RoomListItem
+                    onPress={this.onClickItem}
+                    key={data.roomId}
+                    data={data}
+                />,
+            );
         }
         return (
             <View

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import PropTypes from 'prop-types';
-
+import ScrollTabView, {
+    ScrollableTabBar,
+} from 'react-native-scrollable-tab-view';
 // import { connect } from '../../redux';
 import Container from '../../components/Container';
-import CXScrollableTabView from '../../components/CXScrollableTabView';
 import RecommandScreen from './RecommandScreen';
 import LiveListScreen from './LiveListScreen';
 import UI from '../../UI';
@@ -62,16 +63,23 @@ export default class Splash extends Component {
     render() {
         const { list } = this.state;
         return (
-            <Container style={{ flex: 1, paddingBottom: 0 }}>
-                <CXScrollableTabView tabItemStyle={styles.tabItemStyle}>
+            <Container style={styles.container}>
+                <ScrollTabView
+                    renderTabBar={() => <ScrollableTabBar />}
+                    tabItemStyle={styles.tabItemStyle}
+                >
                     {this.renderGameTypeView(list)}
-                </CXScrollableTabView>
+                </ScrollTabView>
             </Container>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingBottom: 0,
+    },
     tabItemStyle: {
         backgroundColor: UI.color.primary1,
     },
