@@ -5,7 +5,7 @@ import Swiper from 'react-native-swiper';
 // import { connect } from '../../../redux';
 import Container from '../../components/Container';
 import RoomListItem from '../../components/RoomListItem';
-import JJListView from '../../components/JJListView';
+import JJRefreshListView from '../../components/JJRefreshListView';
 import UI from '../../UI';
 import LocalData from './LocalData';
 
@@ -81,8 +81,8 @@ export default class LiveListScreen extends Component {
     render() {
         console.debug('[render]', TAG);
         return (
-            <Container style={{ paddingBottom: 0 }}>
-                <JJListView
+            <Container style={{ paddingBottom: 0, marginTop: 0 }}>
+                <JJRefreshListView
                     renderItem={this.renderFlatItem}
                     ListHeaderComponent={this.renderListHeaderComponent}
                     numColumns={2}

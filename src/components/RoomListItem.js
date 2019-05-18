@@ -35,7 +35,6 @@ export default class RoomListItem extends Component {
         console.debug('[render] RoomListItem');
         const { data, onPress } = this.props;
         const { name, coverUrl, anchorName, category, popularity } = data;
-        console.log('data', data);
 
         return (
             <View style={styles.container}>

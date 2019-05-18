@@ -168,7 +168,7 @@ export default class RecommandScreen extends Component {
 
     render() {
         return (
-            <Container style={{ paddingBottom: 0 }}>
+            <Container style={{ paddingBottom: 0, marginTop: 0 }}>
                 <SectionList
                     renderItem={this.renderItem}
                     ListHeaderComponent={this.renderListHeaderComponent}
