@@ -20,6 +20,7 @@
     "react": "16.8.3",
     "react-native": "0.59.1",
     "react-native-gesture-handler": "^1.1.0",
+    "react-native-modal": "^11.0.1",
     "react-native-scrollable-tab-view": "^0.10.0",
     "react-native-splash-screen": "^3.2.0",
     "react-native-swiper": "^1.5.14",
