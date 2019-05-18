@@ -35,6 +35,8 @@ export default class RoomListItem extends Component {
         console.debug('[render] RoomListItem');
         const { data, onPress } = this.props;
         const { name, coverUrl, anchorName, category, popularity } = data;
+        console.log('data', data);
+
         return (
             <View style={styles.container}>
                 <TouchableOpacity onPress={onPress}>
@@ -50,9 +52,9 @@ export default class RoomListItem extends Component {
                                 </Text>
                             </View>
                         </View>
-                        <View>
-                            <Text>{anchorName}</Text>
-                            <Text>{popularity}</Text>
+                        <View style={styles.contetnBottomView}>
+                            <Text style={styles.anchorName}>{anchorName}</Text>
+                            <Text style={styles.popularity}>{popularity}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -72,6 +74,7 @@ const styles = StyleSheet.create({
     contentView: {
         width,
         height: heightOfBg,
+        justifyContent: 'space-between',
     },
     bgImage: {
         position: 'absolute',
@@ -90,5 +93,18 @@ const styles = StyleSheet.create({
     },
     categoryText: {
         color: UI.color.white1,
+    },
+    contetnBottomView: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    anchorName: {
+        color: UI.color.white1,
+        paddingHorizontal: 5,
+    },
+    popularity: {
+        color: UI.color.white1,
+        paddingHorizontal: 5,
     },
 });
