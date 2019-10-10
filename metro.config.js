@@ -12,6 +12,11 @@ module.exports = {
         experimentalImportSupport: false,
         inlineRequires: false,
       },
+      	
     }),
   },
+  server: {
+    /* server options */
+    port: 8071,
+  }
 };
